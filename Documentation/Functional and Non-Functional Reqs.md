@@ -1,9 +1,7 @@
-**Author:**             Charis Grubb
+## **Author:**             Charis Grubb
+## **Create Date:**        September 2nd, 2024
+## **Last Updated:**       September 2nd, 2024
 
-**Create Date:**        September 2nd, 2024
-
-**Last Updated:**       September 2nd, 2024
----------------
 
 
 
