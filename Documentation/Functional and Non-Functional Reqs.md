@@ -30,3 +30,6 @@
 - Every function/action shall have logging. 
 - Every function/action shall have exception handling around it to ensure the system fails into a safe state. 
 - External Database connections offered: MSSQL, Oracle, PostgreSQL, MySQL. 
+- The system shall have a failover if it is unable to log to the database, in order to cache logs locally. 
+- They system shall have a mechanism to push cached logs into the database once connection is reestablished.
+- All registered sensors should have a corresponding UUID known as the sensor ID. The sensor_id should be created upon sensor registration with the app.

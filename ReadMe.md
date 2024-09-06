@@ -8,5 +8,5 @@ This must be installed and running first before other modules are installed and 
 
 _______________________________________________________________________________________________________________________________________________________________________________________
 
-**Sensor Summulation Service:** Link coming soon....
+**Sensor Simmulation Service:** Link coming soon....
 
