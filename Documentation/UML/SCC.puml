@@ -1,0 +1,20 @@
+@startuml 
+
+
+
+
+class Logger{
+
+}
+
+class DataHandler{
+    
+InternalDataBaseConnection InternalDBConnection
+ExternalDatabaseConnection[] ExternalDBConnections
+
+}
+
+Interface InternalDataBaseConnection
+Interface ExternalDatabaseConnection
+
+@enduml
