@@ -1,0 +1,10 @@
+@startuml 
+
+class DataHandler{
+    
+Object InternalDBConnection
+Object[] ExternalDBConnections
+
+}
+
+@enduml
