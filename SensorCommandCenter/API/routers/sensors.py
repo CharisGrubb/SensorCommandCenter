@@ -3,6 +3,7 @@ from pydantic import BaseModel
 
 ############################################# API MODEL DEFINITIONS ##############################################################################
 class Sensor(BaseModel):
+    sensor_id: str
     sensor_type: str 
     sensor_brand: str
 
