@@ -12,3 +12,8 @@ async def root(theme: str = "Standard"): ###Home Web Page
 @router.get("/UserManagement")
 async def userManagment(theme: str = "Standard"): ###Home Web Page
     return {"message":"UserManagement"}
+
+
+@router.get("/UserManagement/{user_id}")
+async def userManagment(user_id,theme: str = "Standard"): ###Home Web Page
+    return {"message":"UserManagement"}
