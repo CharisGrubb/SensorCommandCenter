@@ -21,11 +21,16 @@ erDiagram
     }
     
     Sensor_Data_Points {
-        float number_value
-        str str_value
-        create_date datetime
+        int(identity) data_point_id
+        uuid sensor_id
+        int int_value 
+        numeric(10,5) dec_number  
+        text str_value
     }
    
+    Logs{
+        text log_note
+    }
 
 
 ```
