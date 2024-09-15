@@ -1,8 +1,12 @@
 @startuml 
 
 
+API<|-- Sensors
+Sensors<|--Sensor
+
 abstract API{}
 abstract Resource{}
+
 
 class Logger{
 
