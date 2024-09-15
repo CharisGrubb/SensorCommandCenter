@@ -24,7 +24,7 @@ erDiagram
         int(identity) data_point_id
         uuid sensor_id
         int int_value 
-        numeric(10,5) dec_number  
+        numeric dec_number  
         text str_value
     }
    
