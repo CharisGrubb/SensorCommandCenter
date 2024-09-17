@@ -51,4 +51,14 @@ CREATE TABLE IF NOT EXISTS logs(
     ,Create_Date datetime --Timestamp of action occurred
 );
 
+CREATE TABLE IF NOT EXISTS Configs(
+    Config_ID INTEGER Primary key
+    ,Config_Name text 
+    ,Int_Value Integer
+    ,str_value text
+    ,Create_date datetime DEFAULT DateTime()
+    ,Modify_Date datetime 
+
+)
+
 PRAGMA User_version = 1;
