@@ -17,9 +17,15 @@ ________________________________________________________________________________
 
 #### UML Diagrams: 
 
-![Class Diagram](http://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/CharisGrubb/SensorCommandCenter/main/Documentation/UML/SCC.puml)
+<!-- ![Class Diagram](http://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/CharisGrubb/SensorCommandCenter/main/Documentation/UML/SCC.puml&fmt=png)
 <!-- TEST -->
 ![Diagram Image Link](https://raw.githubusercontent.com/CharisGrubb/SensorCommandCenter/main/Documentation/UML/SCC.puml)
-![system overview](http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.github.com/CharisGrubb/SensorCommandCenter/main/Documentation/UML/SCC.puml)
+![system overview](http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.github.com/CharisGrubb/SensorCommandCenter/main/Documentation/UML/SCC.puml) -->
+
+```plantuml 
+@startuml
+!include ./Documentation/UML.SSC.puml
+@enduml
+```
 
 #### [Database Relational Diagrams](Documentation/Database_Relational_Diagram.md)
