@@ -24,7 +24,7 @@ ________________________________________________________________________________
 
 ```plantuml 
 @startuml
-!include ./Documentation/UML.SSC.puml
+!include https://raw.githubusercontent.com/CharisGrubb/SensorCommandCenter/main/Documentation/UML/SCC.puml
 @enduml
 ```
 
