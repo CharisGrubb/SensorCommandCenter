@@ -1,5 +1,5 @@
 @startuml 
-
+skinparam groupInheritance 2
 
 API <|-- Sensors
 Sensors <|-- Sensor
@@ -14,8 +14,8 @@ class Logger{
 
 class DataHandler{
     --private attributes--
-    InternalDataBaseConnection InternalDBConnection
-    ExternalDatabaseConnection[] ExternalDBConnections
+    InternalDBConnection InternalDBConnection
+    ExternalDBConnection[] ExternalDBConnections
 
 }
 
@@ -29,7 +29,13 @@ class Sensor <<Resource>>{
     DELETE()
 }
 
-Interface InternalDataBaseConnection
-Interface ExternalDatabaseConnection
+
+class InternalDBConnection{}
+class ExternalDBConnection {}
+class ExternalDB_MSSQL{}
+class ExternalDB_MySQL{}
+
+class ExternalDB_MSSQL extends ExternalDBConnection
+class ExternalDB_MySQL extends ExternalDBConnection
 
 @enduml
