@@ -1,23 +1,13 @@
 @startuml 
 skinparam groupInheritance 2
 
-API <|-- Sensors
-Sensors <|-- Sensor
+
 
 abstract API{}
 abstract Resource{}
 
 
-class Logger{
 
-}
-
-class DataHandler{
-    --private attributes--
-    InternalDBConnection InternalDBConnection
-    ExternalDBConnection[] ExternalDBConnections
-
-}
 
 class Sensors <<API>>{
     Sensor sensor
@@ -29,6 +19,19 @@ class Sensor <<Resource>>{
     DELETE()
 }
 
+class Logger{
+    InternalDBConnection InternalDBConnection
+}
+
+class DataHandler{
+    --private attributes--
+    InternalDBConnection InternalDBConnection
+    ExternalDBConnection[] ExternalDBConnections
+
+}
+
+API <|-- Sensors
+Sensors <|-- Sensor
 
 class InternalDBConnection{}
 class ExternalDBConnection {}
