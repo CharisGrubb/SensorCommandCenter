@@ -10,7 +10,12 @@ ________________________________________________________________________________
 
 **Sensor Simmulation Service:** Link coming soon....
 
+**GUI Desktop Interface:** Link coming soon....
+
+**Web Client Interface:** Link coming soon....
+
 **Shelly Sensor Service:** Link coming soon....
+
 
 
 _______________________________________________________________________________________________________________________________________________________________________________________
@@ -23,3 +28,5 @@ ________________________________________________________________________________
 
 
 #### [Database Relational Diagrams](Documentation/Database_Relational_Diagram.md)
+
+#### [Non-Functional and Functional Requirements](Documentation/Functional_and_Non_Functional_Reqs.md)

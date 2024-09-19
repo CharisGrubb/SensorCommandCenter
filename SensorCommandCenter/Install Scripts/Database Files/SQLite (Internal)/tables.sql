@@ -53,7 +53,9 @@ CREATE TABLE IF NOT EXISTS logs(
 
 CREATE TABLE IF NOT EXISTS Configs(
     Config_ID INTEGER Primary key
-    ,Config_Name text 
+    ,Config_Name text --Group name identifier- i.e. "Eastern Border DataWarehouse"--Inputed by client
+    ,Config_Category text  --Example: External_DB
+    ,Config_Sub_Category text -- Example: Port, Driver, Server, Database Name, etc
     ,Int_Value Integer
     ,str_value text
     ,Create_date datetime DEFAULT DateTime()
