@@ -1,3 +1,4 @@
+import os
 import sqlite3
 
 
@@ -17,7 +18,13 @@ if current_user_version==0:
         cursor.executescript(sql_file.read()) #Create Tables
         conn.commit() #Commit creation
 
-print('start checking update scripts')
+
+update_file_paths = os.listdir('SensorCommandCenter/Install Scripts/Database Files/SQLite (Internal)/Update_Scripts')
+for file in update_file_paths:
+    print(file)
+
+    #Check file update number, if it is greater than users current version...execute. 
+
 
 
 conn.close() #ALWAYS close your connections ;)
