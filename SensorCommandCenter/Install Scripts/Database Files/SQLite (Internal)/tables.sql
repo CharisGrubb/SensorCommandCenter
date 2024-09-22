@@ -54,13 +54,21 @@ CREATE TABLE IF NOT EXISTS logs(
 CREATE TABLE IF NOT EXISTS Configs(
     Config_ID INTEGER Primary key
     ,Config_Name text --Group name identifier- i.e. "Eastern Border DataWarehouse"--Inputed by client
-    ,Config_Category text  --Example: External_DB
-    ,Config_Sub_Category text -- Example: Port, Driver, Server, Database Name, etc
-    ,Int_Value Integer
-    ,str_value text
+    ,Config_Description text --Give users ability to add some additional notes for referencing
+    ,Config_Type text  --Example: External_DB
+    ,Config_Category text, -- Example: MSSQL, MariaDB, MySQL, etc
+    ,Config_Sub_Category text 
     ,Create_date datetime DEFAULT DateTime()
     ,Modify_Date datetime 
 
+)
+CREATE TABLE IF NOT EXISTS Config_Details(
+    Config_ID INTEGER REFERENCES Configs(Config_ID)
+    ,Config_Detail_Name text NOT NULL --Example: Server Name, Server IP, Database Name, etc
+    ,Config_Detail_Val text --Store strings, integers, etc...cast integers or doubles as needed
+    ,Create_date datetime DEFAULT DateTime()
+    ,Modify_Date datetime 
+    PRIMARY KEY(Config_ID, Config_Name)
 )
 
 PRAGMA User_version = 1;
