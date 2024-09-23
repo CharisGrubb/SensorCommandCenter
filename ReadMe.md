@@ -8,7 +8,7 @@ This must be installed and running first before other modules are installed and 
 
 _______________________________________________________________________________________________________________________________________________________________________________________
 
-**Sensor Simmulation Service:** Link coming soon....
+**Sensor Simmulation Service:** [Sensor Command Center - Sensor Simmulation Service](https://github.com/CharisGrubb/SensorCommandCenter-SensorSimmulation)
 
 **GUI Desktop Interface:** Link coming soon....
 
