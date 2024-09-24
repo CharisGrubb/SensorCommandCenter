@@ -11,7 +11,13 @@ class InternalDBConnection():
     def connect(self):
         self.conn = sqlite3.connect("SensorCommandCenter/Database/internal_sensor_database.db")
 
+    def add_sensor(self, sensor_id, sensor_name, sensor_model, sensor_type, import_type, create_user_id):
+        pass
+
     def get_configurations(self, config_name, category, sub_category): 
+        pass
+
+    def add_sensor_datapoint(self, sensor_id, value, datetime_collected):
         pass
 
     def close_connection(self):

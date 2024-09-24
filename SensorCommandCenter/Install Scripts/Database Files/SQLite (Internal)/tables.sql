@@ -36,9 +36,7 @@ CREATE TABLE IF NOT EXISTS Sensors(
 CREATE TABLE IF NOT EXISTS Sensor_data_points(
     data_point_id INTEGER PRIMARY KEY --(AKA ROWID) gives each row a unique number id (64 bit signed int)
     ,sensor_id text REFERENCES Sensors(Sensor_id)
-    ,int_value integer NULL
-    ,dec_number numeric(10,5) NULL --For temps, while real can store a floating point, the numeric type contains more precision, (similar to float vs double in java). 
-    ,str_value text NULL
+    ,val text NULL --cast dec or int as needed
     ,create_date datetime -- time at which this was recorded
 
 );
