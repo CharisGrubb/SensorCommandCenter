@@ -1,3 +1,4 @@
+import uuid
 import sqlite3 #Used for internal db connection
 import sqlalchemy #used for external db connection
 import traceback
@@ -11,7 +12,20 @@ class InternalDBConnection():
     def connect(self):
         self.conn = sqlite3.connect("SensorCommandCenter/Database/internal_sensor_database.db")
 
-    def add_sensor(self, sensor_id, sensor_name, sensor_model, sensor_type, import_type, create_user_id):
+    def add_sensor(self, sensor_name, sensor_model, sensor_type, import_type, create_user_id):
+        pass
+    
+    def add_user(self, username, user_f_name, user_l_name, pw):
+        pass
+
+
+    def get_sensor(self, sensor_id):
+        pass
+
+    def get_all_sensors(self):
+        pass 
+
+    def get_all_model_sensors(self, model):
         pass
 
     def get_configurations(self, config_name, category, sub_category): 
