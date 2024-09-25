@@ -33,7 +33,14 @@ class DataHandler{
 API <|-- Sensors
 Sensors <|-- Sensor
 
-class InternalDBConnection{}
+class InternalDBConnection{
+    SQLiteConnection conn
+    __init__()
+    connect()
+    close_connection()
+    add_sensor(self, sensor_name, sensor_model, sensor_type, import_type, create_user_id)
+
+}
 class ExternalDBConnection {}
 class ExternalDB_MSSQL{}
 class ExternalDB_MySQL{}
