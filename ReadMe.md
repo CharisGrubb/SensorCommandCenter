@@ -30,3 +30,8 @@ ________________________________________________________________________________
 #### [Database Relational Diagrams](Documentation/Database_Relational_Diagram.md)
 
 #### [Non-Functional and Functional Requirements](Documentation/Functional_and_Non_Functional_Reqs.md)
+
+
+
+---TEST----
+![Diagram Image Link](http://www.plantuml.com/plantuml/proxy?cache=no&fmt=svg&src=https://raw.githubusercontent.com/CharisGrubb/SensorCommandCenter/refs/heads/main/Documentation/UML/SCC.puml)
