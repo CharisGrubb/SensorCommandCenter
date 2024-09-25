@@ -28,10 +28,16 @@ class InternalDBConnection():
     def get_all_model_sensors(self, model):
         pass
 
+    def get_all_type_sensors(self, type):
+        pass
+
     def get_configurations(self, config_name, category, sub_category): 
         pass
 
     def add_sensor_datapoint(self, sensor_id, value, datetime_collected):
+        pass
+
+    def store_log(self, log_name, log_source, log_message, log_datetime):
         pass
 
     def close_connection(self):

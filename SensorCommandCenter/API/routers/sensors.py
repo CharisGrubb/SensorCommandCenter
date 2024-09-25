@@ -5,7 +5,7 @@ from pydantic import BaseModel
 class Sensor(BaseModel):
     sensor_id: str
     sensor_type: str 
-    sensor_brand: str
+    sensor_model: str
 
 
 
@@ -25,6 +25,11 @@ async def get_sensor_details(sensor_id:str): ###Sensor_ID should be a UUID
 #PUT to UPDATE, POST to CREATE
 @router.post("/sensor")
 async def create_sensor(sensor:Sensor):
+    #AUTHENTICATE USER
+
+    #DB CALL TO CREATE SENSOR
+
+    #RETURN NEW SENSOR OBJECT
     return sensor
 
 #PATHS are created in order; users/me before users/{user_ID} to avoid pydantic validation errors
