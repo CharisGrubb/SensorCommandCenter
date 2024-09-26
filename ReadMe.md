@@ -33,5 +33,11 @@ ________________________________________________________________________________
 
 
 
----TEST----
-![Diagram Image Link](http://www.plantuml.com/plantuml/proxy?cache=no&fmt=svg&src=https://raw.githubusercontent.com/CharisGrubb/SensorCommandCenter/refs/heads/main/Documentation/UML/SCC.puml)
+
+
+
+
+
+
+Proxy Service UML:
+![Proxy PUML](http://www.plantuml.com/plantuml/proxy?cache=no&fmt=svg&src=https://raw.githubusercontent.com/CharisGrubb/SensorCommandCenter/refs/heads/main/Documentation/UML/SCC.puml)
