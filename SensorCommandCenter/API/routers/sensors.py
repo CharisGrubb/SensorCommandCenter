@@ -1,3 +1,4 @@
+from Database.Database_Interfaces import InternalDBConnection
 from fastapi import APIRouter
 from pydantic import BaseModel
 
@@ -15,7 +16,13 @@ router = APIRouter()
 
 @router.get("/sensors", tags=["sensors"])
 async def get_sensor_list():
-    return [{"Sesnor Type": "Shelly", "Last Reading":"2024-09-06 11:53:02"},{"Sensor Type":"Manual","Last Reading": None}]
+    db = InternalDBConnection()
+    db.connect()
+    sensors = db.get_all_sensors()
+    db.close_connection()
+    return {"results" : sensors}
+
+    # return [{"Sensor Type": "Shelly", "Last Reading":"2024-09-06 11:53:02"},{"Sensor Type":"Manual","Last Reading": None}]
 
 
 @router.get("/sensor/{sensor_id}", tags=["sensors"])

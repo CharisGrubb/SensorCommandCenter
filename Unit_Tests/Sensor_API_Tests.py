@@ -10,7 +10,8 @@ def get_all_sensors():
 
     if response.status_code == 200:
         results = response.json()
-        for r in results:
+        for r in results['results']:
             print(r)
     else:
         print('Failed to get results...response code:', response.status_code)
+

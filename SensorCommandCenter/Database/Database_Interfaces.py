@@ -2,6 +2,7 @@ import uuid
 import sqlite3 #Used for internal db connection
 import sqlalchemy #used for external db connection
 import traceback
+import os
 
 
 class InternalDBConnection():
@@ -9,8 +10,22 @@ class InternalDBConnection():
     def __init__(self):
         self.conn=None
 
+    def __convert_results_to_json(self, results,headers:list):
+        results_json=[]
+        for r in results:
+            row_json={}
+            for col in range(len(r)):
+                row_json[headers[col]]=r[col]
+            results_json.append(row_json)
+            
+        return results_json
+
     def connect(self):
-        self.conn = sqlite3.connect("SensorCommandCenter/Database/internal_sensor_database.db")
+        if os.path.exists("Database/internal_sensor_database.db"):
+            self.conn = sqlite3.connect("Database/internal_sensor_database.db")
+            print("CONNECTED! ", self.conn)
+        else:
+            print("NO DB", os.getcwd())
 
     def add_sensor(self, sensor_name, sensor_model, sensor_type, import_type, create_user_id):
         pass
@@ -23,7 +38,15 @@ class InternalDBConnection():
         pass
 
     def get_all_sensors(self):
-        pass 
+        if self.conn is not None:
+            crs = self.conn.cursor()
+            crs.execute("""SELECT sensor_id,sensor_name,sensor_model,sensor_type ,import_type, sensor_enabled int, create_date ,created_by, modify_date ,modified_by
+                        FROM Sensors;""") 
+            resultsset = crs.fetchall()
+            headers =[x[0] for x in crs.description]
+            results = self.__convert_results_to_json(resultsset, headers)
+            self.conn.commit()
+            return results
 
     def get_all_model_sensors(self, model):
         pass
@@ -32,7 +55,15 @@ class InternalDBConnection():
         pass
 
     def get_configurations(self, config_name, category, sub_category): 
-        pass
+         if self.conn is not None:
+            crs = self.conn.cursor()
+            crs.execute("""SELECT *
+                        FROM Configs;""") ####CHANGE TO HEADER NAMES...testing
+            resultsset = crs.fetchall()
+            headers =[x[0] for x in crs.description]
+            results = self.__convert_results_to_json(resultsset, headers)
+            self.conn.commit()
+            return results
 
     def add_sensor_datapoint(self, sensor_id, value, datetime_collected):
         pass
@@ -41,8 +72,9 @@ class InternalDBConnection():
         pass
 
     def close_connection(self):
-        self.conn.close()
-        self.conn=None
+        if self.conn is not None:
+            self.conn.close()
+            self.conn=None
 
 #PARENT-SQLAlchemy
 class ExternalDBConnection():

@@ -8,6 +8,8 @@ conn = sqlite3.connect("SensorCommandCenter/Database/internal_sensor_database.db
 
 cursor = conn.cursor()
 
+
+
 #GET CURRENT USER VERSION 
 cursor.execute("PRAGMA user_version")
 current_user_version = cursor.fetchall()[0][0] #Used to tell which update scripts need ran for the DB

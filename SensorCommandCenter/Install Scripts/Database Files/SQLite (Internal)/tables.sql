@@ -25,6 +25,7 @@ CREATE TABLE IF NOT EXISTS Sensors(
     ,sensor_model text -- Shelly, Bosch, Honeywell, etc...
     ,sensor_type text -- Temp, motion, etc
     ,import_type int -- 0= manual, 1==auto, 2 = both
+    ,sensor_enabled int --0==off, 1==on
     ,create_date datetime
     ,created_by text REFERENCES Users(User_ID) 
     ,modify_date datetime
