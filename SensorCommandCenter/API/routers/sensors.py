@@ -1,6 +1,11 @@
 from Database.Database_Interfaces import InternalDBConnection
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends, Header, HTTPException
+
 from pydantic import BaseModel
+from typing import Annotated
+
+import traceback
+import secrets
 
 ############################################# API MODEL DEFINITIONS ##############################################################################
 class Sensor(BaseModel):
@@ -15,18 +20,29 @@ class Sensor(BaseModel):
 router = APIRouter()
 
 @router.get("/sensors", tags=["sensors"])
-async def get_sensor_list():
-    db = InternalDBConnection()
-    db.connect()
-    sensors = db.get_all_sensors()
-    db.close_connection()
-    return {"results" : sensors}
+async def get_sensor_list(username: Annotated[str | None, Header()] = None, password: Annotated[str | None, Header()] = None):
+    #Authenticate User first
+    if username is None:
+        raise HTTPException(status_code = 401, detail='Unauthorized')
+    else:
+        try:
+            db = InternalDBConnection()
+            db.connect()
+            sensors = db.get_all_sensors()
+            db.close_connection()
+            return {"results" : sensors}
+        except:
+            #Log error to database with traceback details
+            raise HTTPException(status_code=500, detail="Error occured. Contact administrator.")
 
-    # return [{"Sensor Type": "Shelly", "Last Reading":"2024-09-06 11:53:02"},{"Sensor Type":"Manual","Last Reading": None}]
+    
 
 
 @router.get("/sensor/{sensor_id}", tags=["sensors"])
 async def get_sensor_details(sensor_id:str): ###Sensor_ID should be a UUID
+
+    #Authenticate User
+
     return [{"Sensor Type":"TEST"}]
 
 #PUT to UPDATE, POST to CREATE

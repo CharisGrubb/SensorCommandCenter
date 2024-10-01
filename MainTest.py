@@ -7,10 +7,10 @@ import os
 
 # Logger_Tests.test_log()
 
-# Sensor_API_Tests.get_all_sensors()
+Sensor_API_Tests.get_all_sensors()
 
 
 
 
-os.chdir("./SensorCommandCenter") #Have to go down one layer to be able to connect to db
-Database_tests.get_all_configs()
+# os.chdir("./SensorCommandCenter") #Have to go down one layer to be able to connect to db
+# Database_tests.get_all_configs()
