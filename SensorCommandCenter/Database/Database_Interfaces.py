@@ -33,7 +33,7 @@ class InternalDBConnection():
             new_sensor_id = uuid.uuid4()
 
             query = """INSERT INTO Sensors ( sensor_id, sensor_name, sensor_model, sensor_type, import_type 
-                                            ,sensor_enabled, create_date, created_by
+                                            ,sensor_enabled, create_date, created_by)
                                 VALUES(?, ?, ?, ?, ?, 0, CURRENT_TIMESTAMP,?);"""  ##Sensor is disabled by default. Additiona step required to enable sensor
             
             params = [new_sensor_id, sensor_name, sensor_model, sensor_type, import_type, create_user_id]
@@ -88,8 +88,22 @@ class InternalDBConnection():
     def add_sensor_datapoint(self, sensor_id, value, datetime_collected):
         pass
 
-    def store_log(self, log_name, log_source, log_message, log_datetime):
-        pass
+    def store_log(self, log_name, log_type, log_source, log_message, log_datetime, user_id:str=None):
+         if self.conn is not None:
+
+
+            query = """INSERT INTO logs ( user_id, log_note ,log_type ,log_source ,log_name ,create_date)
+                                VALUES(?, ?, ?, ?, ?, ?);"""  ##Sensor is disabled by default. Additiona step required to enable sensor
+            
+            params = [user_id, log_message, log_type, log_source, log_name, log_datetime]
+
+            crs = self.conn.cursor()
+            crs.execute(query, parameters = params) 
+            rows_affected = crs.rowcount
+            print(rows_affected)
+            self.conn.commit()
+
+            return rows_affected
 
     def close_connection(self):
         if self.conn is not None:
