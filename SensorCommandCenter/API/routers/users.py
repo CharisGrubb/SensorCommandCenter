@@ -12,7 +12,7 @@ import traceback
 security = HTTPBasic()
 def get_current_username(credentials: Annotated[HTTPBasicCredentials, Depends(security)]):
     current_username_bytes = credentials.username.encode("utf8")
-    correct_username_bytes = b"jediMaster"
+    correct_username_bytes = b"JediMaster"
     is_correct_username = secrets.compare_digest(current_username_bytes, correct_username_bytes)
 
     current_password_bytes = credentials.password.encode("utf8")
@@ -47,4 +47,11 @@ async def update_user_details(user_id:str, user:User): ###User_ID should be a UU
 
 @router.post("/users/newUser", tags=["users"])
 async def create_user_details(user:User): 
+    return [{"User Role":"TEST"}]
+
+#used for remote web/desktop log in
+@router.post("/users/AuthUser", tags=["users"])
+async def authenticate_user(username: Annotated[str | None, Header()] = None, password: Annotated[str | None, Header()] = None): 
+
+
     return [{"User Role":"TEST"}]
