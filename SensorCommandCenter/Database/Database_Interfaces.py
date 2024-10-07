@@ -28,8 +28,25 @@ class InternalDBConnection():
             print("NO DB", os.getcwd())
 
     def add_sensor(self, sensor_name, sensor_model, sensor_type, import_type, create_user_id):
-        pass
-    
+         if self.conn is not None:
+
+            new_sensor_id = uuid.uuid4()
+
+            query = """INSERT INTO Sensors ( sensor_id, sensor_name, sensor_model, sensor_type, import_type 
+                                            ,sensor_enabled, create_date, created_by
+                                VALUES(?, ?, ?, ?, ?, 0, CURRENT_TIMESTAMP,?);"""  ##Sensor is disabled by default. Additiona step required to enable sensor
+            
+            params = [new_sensor_id, sensor_name, sensor_model, sensor_type, import_type, create_user_id]
+
+            crs = self.conn.cursor()
+            crs.execute(query, parameters = params) 
+            rows_affected = crs.rowcount
+            print(rows_affected)
+            self.conn.commit()
+
+            return rows_affected
+         
+
     def add_user(self, username, user_f_name, user_l_name, pw):
         pass
 
@@ -64,6 +81,9 @@ class InternalDBConnection():
             results = self.__convert_results_to_json(resultsset, headers)
             self.conn.commit()
             return results
+         
+    def set_sensor_enabled(sensor_id, enabled):
+        pass
 
     def add_sensor_datapoint(self, sensor_id, value, datetime_collected):
         pass
