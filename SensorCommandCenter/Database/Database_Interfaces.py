@@ -4,6 +4,8 @@ import sqlalchemy #used for external db connection
 import traceback
 import os
 
+from SensorCommandCenter.Database import IOValidation
+
 
 class InternalDBConnection():
     
@@ -48,17 +50,28 @@ class InternalDBConnection():
             return rows_affected
          
 
-    def add_user(self, username, user_f_name, user_l_name, pw):
-        pass
+    def add_user(self, username:str, user_f_name:str, user_l_name:str, pw:str):
+        #validate parameters
+        IOValidation.InputOutputValidation.validate_user_name(username) #If it fails, error will be raised
+        IOValidation.InputOutputValidation.validate_user_first_last_name(user_f_name, user_l_name)
+        #encrypt pw, parameter should already be hashed
+
+        #insert into the db 
+        if self.conn is not None:
+            new_user_id = uuid.uuid4()
 
     def get_password_hash(self, username:str):
 
         #validate username for any unsafe characters
+        IOValidation.InputOutputValidation.validate_user_name(username) #If it fails, error will be raised
+        if  self.conn is not None:
+            query = """ """
 
-        #pull hash from database based on username
+            #pull hash from database based on username
 
-        #decrypt has before returning
-        pass
+            #decrypt has before returning
+        else:
+            raise Exception("Not connected to database, cannot pull data!") #Raise error, do not return None or setinal value, it could be used to bypass controls
 
 
     def get_sensor(self, sensor_id):
@@ -126,10 +139,20 @@ class ExternalDBConnection():
     def __init__(self):
         self.internal_db_connection=InternalDBConnection()
         self.db_configurations = self.internal_db_connection.get_configurations()
+        self.server_name = None #Set to proper columns 
+        self.port = None
+        self.driver = None
+        self.db_name = None
+        self.db_username = None
+        self.db_password = None
 
 
     def get_engine(self):
         pass #Define generic or standard type connection
+
+    def test_connection(self):
+
+        query = "SELECT 1"
 
     def close_connection(self):
         pass
