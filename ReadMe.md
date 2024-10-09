@@ -24,7 +24,9 @@ ________________________________________________________________________________
 
 
 
-![Diagram Image Link](https://www.plantuml.com/plantuml/png/5Sqn3i8m343HdLF01UATgLAGM62gE82JM2HIRLUEBQvFEttzwItJqJnukzo6r2qQNRlxFky0Xh_q7TwZn2IhAaxYgIf3xcXZFYrAWPLagcLbHccPnCc0SGWyj0OVZpvKuFD-mPfpsazg8Mb7_m00)
+Proxy Service UML:
+![Proxy PUML](http://www.plantuml.com/plantuml/proxy?cache=no&fmt=svg&src=https://raw.githubusercontent.com/CharisGrubb/SensorCommandCenter/refs/heads/main/Documentation/UML/SCC.puml)
+
 
 
 #### [Database Relational Diagrams](Documentation/Database_Relational_Diagram.md)
@@ -33,11 +35,10 @@ ________________________________________________________________________________
 
 
 
+_______________________________________________________________________________________________________________________________________________________________________________________
 
 
+#### Log Type Definitions:
 
-
-
-
-Proxy Service UML:
-![Proxy PUML](http://www.plantuml.com/plantuml/proxy?cache=no&fmt=svg&src=https://raw.githubusercontent.com/CharisGrubb/SensorCommandCenter/refs/heads/main/Documentation/UML/SCC.puml)
+- System Connections - Examples: Database connection success/failures,
+- Authentication - User log-ins success/failures

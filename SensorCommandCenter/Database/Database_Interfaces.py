@@ -5,12 +5,15 @@ import traceback
 import os
 
 from SensorCommandCenter.Database import IOValidation
+from SensorCommandCenter.Logging import Logger
 
 
 class InternalDBConnection():
     
     def __init__(self):
-        self.conn=None
+       self.conn = None
+       self.log = Logger.Log("Internal_DB_Interface", "Database Interfaces")
+
 
     def __convert_results_to_json(self, results,headers:list):
         results_json=[]
@@ -25,9 +28,9 @@ class InternalDBConnection():
     def connect(self):
         if os.path.exists("Database/internal_sensor_database.db"):
             self.conn = sqlite3.connect("Database/internal_sensor_database.db")
-            print("CONNECTED! ", self.conn)
+            self.log.log_to_database("System Connections","Connected to internal database successfuly",None)
         else:
-            print("NO DB", os.getcwd())
+            raise Exception("NO INTERNAL DB", os.getcwd())
 
     def add_sensor(self, sensor_name, sensor_model, sensor_type, import_type, create_user_id):
          if self.conn is not None:
@@ -111,22 +114,7 @@ class InternalDBConnection():
     def add_sensor_datapoint(self, sensor_id, value, datetime_collected):
         pass
 
-    def store_log(self, log_name, log_type, log_source, log_message, log_datetime, user_id:str=None):
-         if self.conn is not None:
-
-
-            query = """INSERT INTO logs ( user_id, log_note ,log_type ,log_source ,log_name ,create_date)
-                                VALUES(?, ?, ?, ?, ?, ?);"""  ##Sensor is disabled by default. Additiona step required to enable sensor
-            
-            params = [user_id, log_message, log_type, log_source, log_name, log_datetime]
-
-            crs = self.conn.cursor()
-            crs.execute(query, parameters = params) 
-            rows_affected = crs.rowcount
-            print(rows_affected)
-            self.conn.commit()
-
-            return rows_affected
+    
 
     def close_connection(self):
         if self.conn is not None:
