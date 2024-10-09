@@ -44,10 +44,20 @@ class InternalDBConnection():
             print(rows_affected)
             self.conn.commit()
 
+
             return rows_affected
          
 
     def add_user(self, username, user_f_name, user_l_name, pw):
+        pass
+
+    def get_password_hash(self, username:str):
+
+        #validate username for any unsafe characters
+
+        #pull hash from database based on username
+
+        #decrypt has before returning
         pass
 
 
