@@ -47,9 +47,10 @@ CREATE TABLE IF NOT EXISTS logs(
     log_id INTEGER PRIMARY KEY
     ,user_id text REFERENCES Users(User_ID)
     ,log_note text
-    ,log_type text
-    ,log_source text
-    ,log_name text 
+    ,log_level text --ERROR, INFO, ALERT, etc
+    ,log_type text -- System Connections, Authorization/Authentication, Database Query....
+    ,log_source text -- add_sensor....create_user...
+    ,log_name text --InternalDB, ExternalDB-ExternalDBName, 
     ,create_date datetime --Timestamp of action occurred
 );
 

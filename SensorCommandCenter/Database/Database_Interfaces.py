@@ -22,7 +22,6 @@ class InternalDBConnection():
             for col in range(len(r)):
                 row_json[headers[col]]=r[col]
             results_json.append(row_json)
-            
         return results_json
 
     def __connect(self):
@@ -33,8 +32,9 @@ class InternalDBConnection():
             raise Exception("NO INTERNAL DB", os.getcwd())
 
     def add_sensor(self, sensor_name, sensor_model, sensor_type, import_type, create_user_id):
-         if self.conn is not None:
-
+         
+        self.__connect()
+        try:
             new_sensor_id = uuid.uuid4()
 
             query = """INSERT INTO Sensors ( sensor_id, sensor_name, sensor_model, sensor_type, import_type 
@@ -46,11 +46,14 @@ class InternalDBConnection():
             crs = self.conn.cursor()
             crs.execute(query, parameters = params) 
             rows_affected = crs.rowcount
-            print(rows_affected)
             self.conn.commit()
-
-
+            self.__close_connection()
             return rows_affected
+        except:
+            #Pipe opperator (|) used in alerting. Alerts for certain logs will split at the pipe and only show the text6 before the pipe. This allows security around stack trace
+            self.log.log_to_database("Database Query","Error inserting new sensor " +sensor_name + " | " + traceback.format_exc(),'ERROR', create_user_id )
+            return -1
+    
          
 
     def add_user(self, username:str, user_f_name:str, user_l_name:str, pw:str):
