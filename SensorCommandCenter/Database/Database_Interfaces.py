@@ -59,6 +59,7 @@ class InternalDBConnection():
         IOValidation.InputOutputValidation.validate_user_first_last_name(user_f_name, user_l_name)
         #encrypt pw, parameter should already be hashed
 
+
         #insert into the db 
         if self.conn is not None:
             new_user_id = uuid.uuid4()
@@ -120,6 +121,13 @@ class InternalDBConnection():
         if self.conn is not None:
             self.conn.close()
             self.conn=None
+
+    
+    def __update_encryptions(self):
+        pass 
+    #A method that will pull encrypted data
+    # , decrypt with the old algorithm
+    # , then encrypt with the new one and store in the database again
 
 #PARENT-SQLAlchemy
 class ExternalDBConnection():

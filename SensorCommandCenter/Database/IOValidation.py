@@ -15,4 +15,13 @@ class InputOutputValidation:
     def validate_sensor_name(sensor_name:str):
         pass
 
+##ENCryptor and DECryptor
+class Ryptor:
+
+    def encrypt():
+        pass
+
+    def decrypt():
+        pass
+
     
