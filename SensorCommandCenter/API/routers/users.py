@@ -11,6 +11,7 @@ import traceback
 ###AUTHORIZATION
 security = HTTPBasic()
 def get_current_username(credentials: Annotated[HTTPBasicCredentials, Depends(security)]):
+    print('Inside get username ')
     current_username_bytes = credentials.username.encode("utf8")
     correct_username_bytes = b"JediMaster"
     is_correct_username = secrets.compare_digest(current_username_bytes, correct_username_bytes)

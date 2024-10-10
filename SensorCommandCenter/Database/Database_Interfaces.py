@@ -25,7 +25,7 @@ class InternalDBConnection():
             
         return results_json
 
-    def connect(self):
+    def __connect(self):
         if os.path.exists("Database/internal_sensor_database.db"):
             self.conn = sqlite3.connect("Database/internal_sensor_database.db")
             self.log.log_to_database("System Connections","Connected to internal database successfuly",None)
@@ -99,15 +99,16 @@ class InternalDBConnection():
         pass
 
     def get_configurations(self, config_name, category, sub_category): 
-         if self.conn is not None:
-            crs = self.conn.cursor()
-            crs.execute("""SELECT *
-                        FROM Configs;""") ####CHANGE TO HEADER NAMES...testing
-            resultsset = crs.fetchall()
-            headers =[x[0] for x in crs.description]
-            results = self.__convert_results_to_json(resultsset, headers)
-            self.conn.commit()
-            return results
+        self.conn.__connect()
+        crs = self.conn.cursor()
+        crs.execute("""SELECT *
+                    FROM Configs;""") ####CHANGE TO HEADER NAMES...testing
+        resultsset = crs.fetchall()
+        headers =[x[0] for x in crs.description]
+        results = self.__convert_results_to_json(resultsset, headers)
+        self.conn.commit()
+        self.conn.close()
+        return results
          
     def set_sensor_enabled(sensor_id, enabled):
         pass
@@ -117,10 +118,9 @@ class InternalDBConnection():
 
     
 
-    def close_connection(self):
-        if self.conn is not None:
-            self.conn.close()
-            self.conn=None
+    def __close_connection(self):
+        self.conn.close()
+        
 
     
     def __update_encryptions(self):

@@ -21,6 +21,7 @@ router = APIRouter()
 
 @router.get("/sensors", tags=["sensors"])
 async def get_sensor_list(username: Annotated[str | None, Header()] = None, password: Annotated[str | None, Header()] = None):
+    print("Inside get Sensor list")
     #Authenticate User first
     if username is None:
         raise HTTPException(status_code = 401, detail='Unauthorized')
@@ -47,8 +48,9 @@ async def get_sensor_details(sensor_id:str): ###Sensor_ID should be a UUID
 
 #PUT to UPDATE, POST to CREATE
 @router.post("/sensor")
-async def create_sensor(sensor:Sensor):
-    #AUTHENTICATE USER
+async def create_sensor(sensor:Sensor,username: Annotated[str | None, Header()] = None, password: Annotated[str | None, Header()] = None):
+    if username is None:
+        raise HTTPException(status_code = 401, details= 'Unauthorized')
 
     #DB CALL TO CREATE SENSOR
 
