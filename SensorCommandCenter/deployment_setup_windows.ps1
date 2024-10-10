@@ -7,4 +7,6 @@ python -m venv .venv
 
 python -m pip install -r requirements.txt
 
+python -m &".\Install Scripts\Database Files\SQLite (Internal)\database_setup_py" #Run Internal database install
+
 fastapi dev main.py #Set for dev currently as testing

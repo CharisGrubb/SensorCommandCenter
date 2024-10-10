@@ -17,19 +17,30 @@ class AuthHandler:
         
 
     def authenticate_user(username:str, password_hash:str):
-        print('Inside get username ')
-        current_username_bytes = username.encode("utf8")
-        correct_username_bytes = b"JediMaster"
-        is_correct_username = secrets.compare_digest(current_username_bytes, correct_username_bytes)
+        # print('Inside get username ')
+        # current_username_bytes = username.encode("utf8")
+        # correct_username_bytes = b"JediMaster"
+        # is_correct_username = secrets.compare_digest(current_username_bytes, correct_username_bytes)
 
-        current_password_bytes = password_hash.encode("utf8")
-        correct_password_bytes = b"R2D2_for_President"
-        is_correct_password = secrets.compare_digest(current_password_bytes, correct_password_bytes)
+        # current_password_bytes = password_hash.encode("utf8")
+        # correct_password_bytes = b"R2D2_for_President"
+        # is_correct_password = secrets.compare_digest(current_password_bytes, correct_password_bytes)
 
-        if not(is_correct_username and is_correct_password):
+        # if not(is_correct_username and is_correct_password):
+        #     raise HTTPException(status_code=401,detail="Incorrect username or password.", headers={"WWWAuthenticate":"Basic"})
+
+        if username is None or password_hash is None:
             raise HTTPException(status_code=401,detail="Incorrect username or password.", headers={"WWWAuthenticate":"Basic"})
+        ####get user acount type from username
+
+        ####If user doesn't exist (NONE returned), raise 401 error
+
+        ##If internal account...get password hash and check digest
+
+        ##Else...connect/call integration to others
         
         return username
+    
     
 
     #central point for hashing, allowing updates 

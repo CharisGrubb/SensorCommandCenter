@@ -61,8 +61,10 @@ class InternalDBConnection():
 
 
         #insert into the db 
-        if self.conn is not None:
-            new_user_id = uuid.uuid4()
+        self.__connect()
+        new_user_id = uuid.uuid4()
+
+        self.__close_connection()
 
     def get_password_hash(self, username:str):
 
@@ -76,7 +78,26 @@ class InternalDBConnection():
             #decrypt has before returning
         else:
             raise Exception("Not connected to database, cannot pull data!") #Raise error, do not return None or setinal value, it could be used to bypass controls
-
+    
+    def get_user_account_type(self, username:str):
+        
+        IOValidation.InputOutputValidation.validate_user_name(username) #If it fails, error will be raised
+        
+        query = """SELECT Acount_type FROM Users WHERE username = ?"""
+        self.__connect()
+        
+        crs = self.conn.cursor()
+        crs.execute(query, [username])
+        resultsset = crs.fetchall()
+        
+        self.__close_connection()
+        
+        if len(resultsset):
+            return resultsset[0][0]
+        else:
+            return None
+        
+        
 
     def get_sensor(self, sensor_id):
         pass
@@ -120,6 +141,7 @@ class InternalDBConnection():
 
     def __close_connection(self):
         self.conn.close()
+        self.conn = None
         
 
     
