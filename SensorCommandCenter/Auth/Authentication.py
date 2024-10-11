@@ -1,8 +1,9 @@
 from fastapi import Depends, HTTPException, status
 from Database.Database_Interfaces import InternalDBConnection
+from Logging.Logger import Log
 
 
-import hashlib 
+import bcrypt 
 import secrets
 import traceback
 
@@ -13,45 +14,47 @@ class AuthHandler:
     def __init__(self):
         self.db = InternalDBConnection()
         self.configs = self.db.get_configurations("Authentication") #Get internal and/or any external configurations configured
+        self.log = Log("Authentication","AuthHandler")
      
         
 
-    def authenticate_user(username:str, password_hash:str):
-        # print('Inside get username ')
-        # current_username_bytes = username.encode("utf8")
-        # correct_username_bytes = b"JediMaster"
-        # is_correct_username = secrets.compare_digest(current_username_bytes, correct_username_bytes)
+    def authenticate_user(self,username:str, password:str):
+       
 
-        # current_password_bytes = password_hash.encode("utf8")
-        # correct_password_bytes = b"R2D2_for_President"
-        # is_correct_password = secrets.compare_digest(current_password_bytes, correct_password_bytes)
-
-        # if not(is_correct_username and is_correct_password):
-        #     raise HTTPException(status_code=401,detail="Incorrect username or password.", headers={"WWWAuthenticate":"Basic"})
-
-        if username is None or password_hash is None:
+        if username is None or password is None:
             raise HTTPException(status_code=401,detail="Incorrect username or password.", headers={"WWWAuthenticate":"Basic"})
-        ####get user acount type from username
-
-        ####If user doesn't exist (NONE returned), raise 401 error
-
-        ##If internal account...get password hash and check digest
-
-        ##Else...connect/call integration to others
         
-        return username
+        ####get user acount type from username
+        user_account_type= self.db.get_user_account_type(username)
+        user_authenticated=False
+       
+        ####If user doesn't exist (NONE returned), raise 401 error
+        if user_account_type is None:
+            raise HTTPException(status_code=401,detail="Incorrect username or password.", headers={"WWWAuthenticate":"Basic"})
+       
+        ##If internal account...get password hash and check digest
+        elif user_account_type == "Internal":
+            user_pw_hash = self.db.get_password_hash(username)
+            user_authenticated = bcrypt.checkpw(password.encode('utf-8'),user_pw_hash)
+
+       
+        ##Else...connect/call integration to others
+
+        self.log.log_to_database("Authentication", username + " authentication successful: " + str(user_authenticated)+ " via " + user_account_type, "ERROR", None)
+        
+        return user_authenticated
     
     
 
     #central point for hashing, allowing updates 
     @staticmethod 
     def hash_data(data_to_hash:str):
-        hashed_objects = {"hash":"","oldHash":"Option for when migrating to new hash algorithm"}
-
-        hashed_objects['hash'] = hashlib.sha384(data_to_hash.encode())
-        hashed_objects['oldHash']="N/A-Will be used when updating hash algorithm for future proofing"
-
-        return hashed_objects
+        try:
+            salty = bcrypt.gensalt()
+            hashed_data = bcrypt.hashpw(data_to_hash.encode('utf-8'), salt=salty)
+            return hashed_data
+        except:
+            return None
     
 
 
