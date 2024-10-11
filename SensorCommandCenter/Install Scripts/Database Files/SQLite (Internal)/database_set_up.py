@@ -1,6 +1,7 @@
 import os
 import sqlite3
-
+import tkinter
+import tkinter.simpledialog 
 
 ##### Connect to database (create new database if it doesn't exist) 
 
@@ -25,7 +26,27 @@ update_file_paths = os.listdir('SensorCommandCenter/Install Scripts/Database Fil
 for file in update_file_paths:
     print(file)
 
-    #Check file update number, if it is greater than users current version...execute. 
+    #Check file update number, if it is greater than users current version...execute.
+
+
+
+
+
+#Prompt user for the default Username/password internal account:
+username = None
+pw = None
+while username is None:
+    username = tkinter.simpledialog.askstring("Internal Admin Username","What username would you like for the built in administrative account:")
+    #Call username validation..
+
+while pw is None:    
+    pw = tkinter.simpledialog.askstring(f"Internal Admin Password","What password would you like for {username}:")
+    #call password validation
+
+#hash pw
+
+
+#store pw in database, creating user
 
 
 
