@@ -131,11 +131,16 @@ class InternalDBConnection():
         headers =[x[0] for x in crs.description]
         results = self.__convert_results_to_json(resultsset, headers)
         self.conn.commit()
-        self.conn.close()
+        self.__close_connection()
         return results
          
-    def set_sensor_enabled(sensor_id, enabled):
-        pass
+    def set_sensor_enabled(self,sensor_id, enabled):
+        self.conn.__connect()
+        crs = self.conn.cursor()
+        crs.execute("UPDATE Sensors set enabled = ? where sensor_id = ?",[enabled, sensor_id])
+        self.conn.commit()
+        self.__close_connection()
+        
 
     def add_sensor_datapoint(self, sensor_id, value, datetime_collected):
         pass
@@ -150,9 +155,16 @@ class InternalDBConnection():
     
     def __update_encryptions(self):
         pass 
-    #A method that will pull encrypted data
-    # , decrypt with the old algorithm
-    # , then encrypt with the new one and store in the database again
+
+        #pull all pws with their username/ids 
+        
+        #loop through and decrypt each one
+
+        #call load_encryption_key to rotate
+
+        #loop through and encrypt each one again
+
+        #update db with updated encryption
 
 #PARENT-SQLAlchemy
 class ExternalDBConnection():

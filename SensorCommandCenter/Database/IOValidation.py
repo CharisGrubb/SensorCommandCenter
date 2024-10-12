@@ -25,11 +25,10 @@ class InputOutputValidation:
 
 ##ENCryptor and DECryptor
 class Ryptor:
-    __loading_encryption_key = False
+
     @staticmethod
     def encrypt(data_to_encrypt:str):
-        while Ryptor.__loading_encryption_key:
-            print('Waiting for encryption key loading to finish...')
+      
         
         key = os.environ.get('SCC_ENC_Key')
         f = Fernet(key)
@@ -42,8 +41,7 @@ class Ryptor:
     
     @staticmethod
     def decrypt(data_to_decrypt:str):
-        while Ryptor.__loading_encryption_key:
-            print('Waiting for encryption key loading to finish...')
+        
         
         key = os.environ.get('SCC_ENC_Key')
         f = Fernet(key)
@@ -54,19 +52,13 @@ class Ryptor:
     
     @staticmethod 
     def load_encryption_key():
-        Ryptor.__loading_encryption_key = True
-        #Pause to allow any processes in the middle of running to finish pushing through
+        try:
+            key = Fernet.generate_key()
+            os.environ["SCC_ENC_Key"] = key
 
-
-        old_key = os.environ.get('SCC_ENC_Key','-1')
-        key = Fernet.generate_key()
-        if old_key != '-1':
-            print("Update data with new rotated encryption key.")
-
-
-        os.environ["SCC_ENC_Key"] = key
-        Ryptor.__loading_encryption_key = True
-
+            return True
+        except:
+            return False
 
 
     
