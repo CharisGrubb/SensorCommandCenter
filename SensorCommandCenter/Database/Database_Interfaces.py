@@ -140,7 +140,7 @@ class InternalDBConnection():
         crs.execute("UPDATE Sensors set enabled = ? where sensor_id = ?",[enabled, sensor_id])
         self.conn.commit()
         self.__close_connection()
-        
+
 
     def add_sensor_datapoint(self, sensor_id, value, datetime_collected):
         pass
@@ -155,6 +155,7 @@ class InternalDBConnection():
     
     def __update_encryptions(self):
         pass 
+        #update global variable to pause all data flows affecting encryption/decrytpion
 
         #pull all pws with their username/ids 
         
@@ -165,6 +166,8 @@ class InternalDBConnection():
         #loop through and encrypt each one again
 
         #update db with updated encryption
+
+        #update global variable to pause all data flows affecting encryption/decrytpion
 
 #PARENT-SQLAlchemy
 class ExternalDBConnection():

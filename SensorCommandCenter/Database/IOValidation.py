@@ -1,5 +1,6 @@
 from cryptography.fernet import Fernet
 import os
+import re
 
 
 
@@ -21,7 +22,17 @@ class InputOutputValidation:
         pass
 
     def validate_sensor_name(sensor_name:str):
-        pass
+        #Check length
+        if len(sensor_name)>100:
+            raise Exception("Sensor name length exceeds 100 character allowance.")
+
+        #Check for invalid characters
+        check_for_disallowed_characters = re.search("[^A-Za-z0-9 _-]",sensor_name)
+        if check_for_disallowed_characters:
+            raise Exception("Invalid character [" + check_for_disallowed_characters.group()+ "] detected in Sensor Name: {sensor_name}")
+        
+
+        return sensor_name
 
 ##ENCryptor and DECryptor
 class Ryptor:
