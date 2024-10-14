@@ -5,11 +5,22 @@ import re
 
 
 #This class is designed to validate input and output for unwanted characters or too much length. It raises an error if something is invalid
+#This is a helper class for the Database Interface. The DB Interface handles checks for usernames/sensornames already existing
 
 class InputOutputValidation:
 
     def validate_user_name(username:str):
-        pass
+        #Check length
+        if len(username)>100:
+            raise Exception("Username length exceeds 100 character allowance.")
+
+        #Check for invalid characters; whitelist of only lower and upper case alphabet, numbers, and underscore
+        check_for_disallowed_characters = re.search("[^A-Za-z0-9_]",username)
+        if check_for_disallowed_characters:
+            raise Exception("Invalid character [" + check_for_disallowed_characters.group()+ "] detected in Username: {username}")
+        
+
+        return username
 
     def validate_user_first_last_name(user_f_name:str, user_l_name:str):
         pass
@@ -26,7 +37,7 @@ class InputOutputValidation:
         if len(sensor_name)>100:
             raise Exception("Sensor name length exceeds 100 character allowance.")
 
-        #Check for invalid characters
+        #Check for invalid characters; whitelist of only lower and upper case alphabet, numbers, space, underscore, and hyphen
         check_for_disallowed_characters = re.search("[^A-Za-z0-9 _-]",sensor_name)
         if check_for_disallowed_characters:
             raise Exception("Invalid character [" + check_for_disallowed_characters.group()+ "] detected in Sensor Name: {sensor_name}")
