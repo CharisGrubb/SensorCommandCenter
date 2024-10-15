@@ -27,10 +27,15 @@ class InputOutputValidation:
 
     def validate_user_pw(pw:str):
         #Check length between min and max (min 12 characters)
+        if len(pw) < 12:
+            raise Exception("Password length requirement not met. Need at least 12 characters.")
+        if len(pw)>50:
+             raise Exception("Password length too long. Character limit is 50.")
 
         #REGEX Check for unwanted characters and min needed character variety (capital, lower, number, special character)
 
-        pass
+        #return the password back if it successfully makes it past all checks
+        return pw
 
     def validate_sensor_name(sensor_name:str):
         #Check length
