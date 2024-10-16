@@ -3,6 +3,9 @@ import sqlite3
 import tkinter
 import tkinter.simpledialog 
 
+from Auth.Authentication import AuthHandler
+from Database import IOValidation, Database_Interfaces
+
 ##### Connect to database (create new database if it doesn't exist) 
 
 conn = sqlite3.connect("SensorCommandCenter/Database/internal_sensor_database.db")
@@ -30,20 +33,27 @@ for file in update_file_paths:
 
 
 
-
+##Set up encryption key
 
 #Prompt user for the default Username/password internal account:
 username = None
 pw = None
+error_msg=''
 while username is None:
-    username = tkinter.simpledialog.askstring("Internal Admin Username","What username would you like for the built in administrative account:")
-    #Call username validation..
-
+    username = tkinter.simpledialog.askstring("Internal Admin Username",error_msg + "What username would you like for the built in administrative account:")
+    #Call username validation
+    try:
+        IOValidation.InputOutputValidation.validate_user_name(username)
+    except:
+        username = None
+        error_msg="Invalid username. Try Again..."
+error_msg=''
 while pw is None:    
-    pw = tkinter.simpledialog.askstring(f"Internal Admin Password","What password would you like for {username}:")
+    pw = tkinter.simpledialog.askstring(f"Internal Admin Password",error_msg + "What password would you like for {username}:")
     #call password validation
 
 #hash pw
+pw_hash = AuthHandler.hash_data(pw)
 
 
 #store pw in database, creating user

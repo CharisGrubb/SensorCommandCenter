@@ -40,7 +40,7 @@ class AuthHandler:
        
         ##Else...connect/call integration to others
 
-        self.log.log_to_database("Authentication", username + " authentication successful: " + str(user_authenticated)+ " via " + user_account_type, "ERROR", None)
+        self.log.log_to_database("Authentication", username + " authenticated: " + str(user_authenticated)+ " via " + user_account_type, "ERROR", None)
         
         return user_authenticated
     
