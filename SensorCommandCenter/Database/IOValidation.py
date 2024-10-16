@@ -32,7 +32,21 @@ class InputOutputValidation:
         if len(pw)>50:
              raise Exception("Password length too long. Character limit is 50.")
 
-        #REGEX Check for unwanted characters and min needed character variety (capital, lower, number, special character)
+        #REGEX Check for unwanted characters 
+        check_for_disallowed_characters = re.search("[^A-Za-z0-9_!@#$%^&*.'`]",pw)
+        if check_for_disallowed_characters:
+            raise Exception("Invalid character [" + check_for_disallowed_characters.group()+ "] detected in Password.")
+        
+        #Check for min needed character variety (capital, lower, number, special character)
+        if not re.search(r"[a-z]", pw):
+            raise Exception("Password requires at least one lower case")
+        if not re.search(r"[A-Z]", pw):
+            raise Exception("Password requires at least one upper case")
+        if not re.search(r"[0-9]", pw):
+            raise Exception("Password requires at least one mumber")
+        if not re.search(r"[!@#$%&*+=_-]", pw):
+            raise Exception("Password requires at least one of the following special characters: !, @, #, $, %, &, *, +, =, _, or -")
+        
 
         #return the password back if it successfully makes it past all checks
         return pw
