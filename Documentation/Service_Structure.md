@@ -12,12 +12,12 @@ flowchart TD
 
     SCC[Sensor Command Center Main Service]
     AlertServe[Alerting Service]
-    
+
     webUI[Web Application User Interface]
     desktopApp[Desktop Application]
 
     SimServ --> SCC
-    AlertServ --> SCC
+    AlertServe --> SCC
     
     webUI --> SCC
     webUI --> AlertServe
