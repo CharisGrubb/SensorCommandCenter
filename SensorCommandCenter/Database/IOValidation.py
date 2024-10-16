@@ -9,6 +9,7 @@ import re
 
 class InputOutputValidation:
 
+    @staticmethod
     def validate_user_name(username:str):
         #Check length
         if len(username)>100:
@@ -21,10 +22,24 @@ class InputOutputValidation:
         
 
         return username
-
+    
+    @staticmethod
     def validate_user_first_last_name(user_f_name:str, user_l_name:str):
-        pass
+        if len(user_f_name)>100 or len(user_l_name)>100:
+            raise Exception("User's First or Last name length exceeds 100 character allowance.")
 
+        #Check for invalid characters; whitelist of only lower and upper case alphabet, numbers, and underscore
+        check_for_disallowed_characters = re.search("[^A-Za-z0-9'_]",user_f_name)
+        if check_for_disallowed_characters:
+            raise Exception("Invalid character [" + check_for_disallowed_characters.group()+ "] detected in user's first name")
+        
+        check_for_disallowed_characters = re.search("[^A-Za-z0-9'_]",user_l_name)
+        if check_for_disallowed_characters:
+            raise Exception("Invalid character [" + check_for_disallowed_characters.group()+ "] detected in user's last name")
+        
+        return (user_f_name,user_l_name) #return tuple of name if they pass checks
+
+    @staticmethod
     def validate_user_pw(pw:str):
         #Check length between min and max (min 12 characters)
         if len(pw) < 12:
