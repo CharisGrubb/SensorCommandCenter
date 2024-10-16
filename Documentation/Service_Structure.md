@@ -2,16 +2,18 @@
 #### Services Flow
 
 ```mermaid
-flowchart;
+
+
+flowchart TD
 
 
 
 
-SCC[Sensor Command Center Main Service]
-SimServ[Simmulation Service]
-AlertServe[Alerting Service]
-webUI[Web Application User Interface]
-desktopApp[Desktop Application]
+    SCC[Sensor Command Center Main Service]
+    SimServ[Simmulation Service]
+    AlertServe[Alerting Service]
+    webUI[Web Application User Interface]
+    desktopApp[Desktop Application]
 
 
 ```
