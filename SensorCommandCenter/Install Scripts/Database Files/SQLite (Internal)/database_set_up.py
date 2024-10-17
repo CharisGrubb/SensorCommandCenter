@@ -1,10 +1,12 @@
 import os
 import sqlite3
 import tkinter
+import tkinter.messagebox
 import tkinter.simpledialog 
 
 from Auth.Authentication import AuthHandler
-from Database import IOValidation, Database_Interfaces
+from Database.Database_Interfaces import InternalDBConnection, IOValidation
+
 
 ##### Connect to database (create new database if it doesn't exist) 
 
@@ -34,6 +36,14 @@ for file in update_file_paths:
 
 
 ##Set up encryption key
+db = InternalDBConnection()
+if not IOValidation.Ryptor.check_for_encryption_key():
+    db._update_encryptions() #Will create new encryption key if it doesn't exist, otherwise, it will rotate the key
+elif tkinter.messagebox.askquestion("Rotate Keys?","""Would you like to rotate encryption keys during this update? 
+                                        Rotating keys and passwords periodically is part of security hygeine and best practices.""") == 'yes':
+    db._update_encryptions() #Will rotate key if it already exists.
+
+#Check for existing admin user that is enabled. 
 
 #Prompt user for the default Username/password internal account:
 username = None
@@ -46,17 +56,26 @@ while username is None:
         IOValidation.InputOutputValidation.validate_user_name(username)
     except:
         username = None
-        error_msg="Invalid username. Try Again..."
+        error_msg="Invalid username. Please, try again..."
 error_msg=''
 while pw is None:    
-    pw = tkinter.simpledialog.askstring(f"Internal Admin Password",error_msg + "What password would you like for {username}:")
-    #call password validation
+    try:
+        pw = tkinter.simpledialog.askstring(f"Internal Admin Password",error_msg + """What password would you like for {username}:
+                                            \n Password Requirements include at least 1 capital/upper case letter, 1 lower case letter, 1 number, 
+                                            and 1 special character [Options: !, @, #, $, %, &, *, +, =, _, or -]""")
+        #call password validation
+        IOValidation.InputOutputValidation.validate_user_pw(pw)
+    except:
+        pw = None
+        error_msg = "Invalid password. Please, try again..."
+
 
 #hash pw
 pw_hash = AuthHandler.hash_data(pw)
 
 
 #store pw in database, creating user
+InternalDBConnection.add_user(username, 'Administrator','Internal-Admin', pw)
 
 
 

@@ -116,5 +116,15 @@ class Ryptor:
         except:
             return False
 
+    @staticmethod 
+    def check_for_encryption_key():
+        try:
+
+            key = os.environ["SCC_ENC_Key"] 
+            f = Fernet(key)#Should error for an invalid key
+            
+            return True
+        except:
+            return False
 
     

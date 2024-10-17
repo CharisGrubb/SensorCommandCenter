@@ -153,22 +153,27 @@ class InternalDBConnection():
         
 
     
-    def __update_encryptions(self):
-        pass 
-        #update global variable to pause all data flows affecting encryption/decrytpion
+    def _update_encryptions(self):
+         
+        #check if key has already been loaded (on inital instalation, it will be false)
+        if IOValidation.Ryptor.check_for_encryption_key():
+            #update global variable to pause all data flows affecting encryption/decrytpion
+            pass
+            #pull all pws with their username/ids 
+            
+            #loop through and decrypt each one
 
-        #pull all pws with their username/ids 
-        
-        #loop through and decrypt each one
+            #call load_encryption_key to rotate
 
-        #call load_encryption_key to rotate
+            #loop through and encrypt each one again
 
-        #loop through and encrypt each one again
+            #update db with updated encryption
 
-        #update db with updated encryption
-
-        #update global variable to pause all data flows affecting encryption/decrytpion
-
+            #update global variable to pause all data flows affecting encryption/decrytpion
+        else:
+            if not IOValidation.Ryptor.load_encryption_key():
+                raise Exception("Issue loading encryption key!")
+            
 #PARENT-SQLAlchemy
 class ExternalDBConnection():
 
