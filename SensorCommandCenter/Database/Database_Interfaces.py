@@ -119,8 +119,18 @@ class InternalDBConnection():
     def get_all_model_sensors(self, model):
         pass
 
-    def get_all_type_sensors(self, type):
-        pass
+    def get_all_type_sensors(self, sensor_type):
+        self.conn.__connect()
+        crs = self.conn.cursor()
+        crs.execute("""SELECT  sensor_id, sensor_name, sensor_model, import_type ,sensor_enabled
+                    FROM Sensors
+                    WHERE Sensor_type = ?;""",[sensor_type])
+        resultsset = crs.fetchall()
+        headers =[x[0] for x in crs.description]
+        results = self.__convert_results_to_json(resultsset, headers)
+        self.conn.commit()
+        self.__close_connection()
+        return results
 
     def get_configurations(self, config_name, category, sub_category): 
         self.conn.__connect()
