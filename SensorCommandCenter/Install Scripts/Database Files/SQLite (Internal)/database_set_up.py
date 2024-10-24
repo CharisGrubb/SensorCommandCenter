@@ -8,6 +8,7 @@ from Auth.Authentication import AuthHandler
 from Database.Database_Interfaces import InternalDBConnection, IOValidation
 
 
+
 ##### Connect to database (create new database if it doesn't exist) 
 
 conn = sqlite3.connect("SensorCommandCenter/Database/internal_sensor_database.db")
@@ -75,7 +76,7 @@ pw_hash = AuthHandler.hash_data(pw)
 
 
 #store pw in database, creating user
-InternalDBConnection.add_user(username, 'Administrator','Internal-Admin', pw)
+InternalDBConnection.add_user(username, 'Administrator','Internal-Admin', pw, 'Global Admin')
 
 
 

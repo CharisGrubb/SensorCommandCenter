@@ -4,15 +4,17 @@ import sqlalchemy #used for external db connection
 import traceback
 import os
 
-from SensorCommandCenter.Database import IOValidation
-from SensorCommandCenter.Logging import Logger
+from Database import IOValidation, Database_Interface_Parents
+from Logging.Logger import Log
 
+       
 
-class InternalDBConnection():
+#Child Internal
+class InternalDBConnection(Database_Interface_Parents.InternalDB):
     
     def __init__(self):
-       self.conn = None
-       self.log = Logger.Log("Internal_DB_Interface", "Database Interfaces")
+        super().__init__()
+        self.log = Log("Internal_DB_Interface", "Database Interfaces")
 
 
     def __convert_results_to_json(self, results,headers:list):
@@ -24,12 +26,7 @@ class InternalDBConnection():
             results_json.append(row_json)
         return results_json
 
-    def __connect(self):
-        if os.path.exists("Database/internal_sensor_database.db"):
-            self.conn = sqlite3.connect("Database/internal_sensor_database.db")
-            self.log.log_to_database("System Connections","Connected to internal database successfuly",None)
-        else:
-            raise Exception("NO INTERNAL DB", os.getcwd())
+   
 
     def add_sensor(self, sensor_name, sensor_model, sensor_type, import_type, create_user_id):
          
@@ -56,7 +53,7 @@ class InternalDBConnection():
     
          
 
-    def add_user(self, username:str, user_f_name:str, user_l_name:str, pw:str):
+    def add_user(self, username:str, user_f_name:str, user_l_name:str, pw:str, role:str = 'Standard User'):
         #validate parameters
         IOValidation.InputOutputValidation.validate_user_name(username) #If it fails, error will be raised
         IOValidation.InputOutputValidation.validate_user_first_last_name(user_f_name, user_l_name)
@@ -157,10 +154,7 @@ class InternalDBConnection():
 
     
 
-    def __close_connection(self):
-        self.conn.close()
-        self.conn = None
-        
+    
 
     
     def _update_encryptions(self):
@@ -184,36 +178,19 @@ class InternalDBConnection():
             if not IOValidation.Ryptor.load_encryption_key():
                 raise Exception("Issue loading encryption key!")
             
-#PARENT-SQLAlchemy
-class ExternalDBConnection():
 
-    def __init__(self):
-        self.internal_db_connection=InternalDBConnection()
-        self.db_configurations = self.internal_db_connection.get_configurations()
-        self.server_name = None #Set to proper columns 
-        self.port = None
-        self.driver = None
-        self.db_name = None
-        self.db_username = None
-        self.db_password = None
-
-
-    def get_engine(self):
-        pass #Define generic or standard type connection
-
-    def test_connection(self):
-
-        query = "SELECT 1"
-
-    def close_connection(self):
-        pass
 
 #Child
-class ExternalDB_MSSQL(ExternalDBConnection):
+class ExternalDB_MSSQL(Database_Interface_Parents.ExternalDBConnection):
      def get_engine(self):
         pass #Override engine with connection syntax specific to MSSQL 
 
 
 #Child
-class ExternalDB_MySQL(ExternalDBConnection):
+class ExternalDB_MySQL(Database_Interface_Parents.ExternalDBConnection):
+    pass
+
+
+#Child 
+class ExternalDB_SQLite(Database_Interface_Parents.ExternalDBConnection):
     pass

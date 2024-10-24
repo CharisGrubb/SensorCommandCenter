@@ -1,7 +1,7 @@
 import traceback
 
 from datetime import datetime
-from SensorCommandCenter.Database.Database_Interfaces import InternalDBConnection
+from Database.Database_Interface_Parents import InternalDB
 
 
 
@@ -13,7 +13,6 @@ class Log:
 
     def log_to_database(self, log_type, message, log_level, user_id = None):
         try:
-            self.db.connect()
             self.db.store_log(self.name, log_type, self.source, message, log_level,str(datetime.now()) , user_id)
             self.__push_from_queue_to_db()
             self.db.close_connection()
@@ -31,26 +30,28 @@ class Log:
         pass
 
 
-class Logger_DB(InternalDBConnection):
+class Logger_DB(InternalDB):
      #Inheritance, child of InternalDB conn
     def store_log(self, log_name, log_type, log_source, log_message, log_level,log_datetime, user_id:str=None):
-         if self.conn is not None:
+        self.__connect()
 
 
-            query = """INSERT INTO logs ( user_id, log_note, log_level ,log_type ,log_source ,log_name ,create_date)
-                                VALUES(?, ?, ?, ?, ?, ?, ?);"""  ##Sensor is disabled by default. Additiona step required to enable sensor
-            
-            params = [user_id, log_message, log_level, log_type, log_source, log_name, log_datetime]
+        query = """INSERT INTO logs ( user_id, log_note, log_level ,log_type ,log_source ,log_name ,create_date)
+                            VALUES(?, ?, ?, ?, ?, ?, ?);"""  ##Sensor is disabled by default. Additiona step required to enable sensor
+        
+        params = [user_id, log_message, log_level, log_type, log_source, log_name, log_datetime]
 
-            crs = self.conn.cursor()
-            crs.execute(query,  params) 
-            rows_affected = crs.rowcount
-            print(rows_affected)
-            self.conn.commit()
+        crs = self.conn.cursor()
+        crs.execute(query,  params) 
+        rows_affected = crs.rowcount
+        print(rows_affected)
+        self.conn.commit()
 
-            return rows_affected
+        self.__close_connection()
 
-    ###Testing this approach to avoid circular imports, have all logging go through this interface, and utilize code reuse
+        return rows_affected
+
+  
 
          
 
