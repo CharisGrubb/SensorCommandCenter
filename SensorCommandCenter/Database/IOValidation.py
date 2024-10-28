@@ -1,6 +1,8 @@
 from cryptography.fernet import Fernet
+import base64
 import os
 import re
+import traceback
 
 
 
@@ -109,8 +111,10 @@ class Ryptor:
     @staticmethod 
     def load_encryption_key():
         try:
+            print('Load Encryption key')
             key = Fernet.generate_key()
-            os.environ["SCC_ENC_Key"] = key
+
+            os.environ["SCC_ENC_Key"] = base64.b64encode(key).decode('utf-8') #Environment variables have to be string, encode and convert to string
 
             return True
         except:
@@ -120,9 +124,8 @@ class Ryptor:
     def check_for_encryption_key():
         try:
 
-            key = os.environ["SCC_ENC_Key"] 
+            key = base64.b64decode(os.environ["SCC_ENC_Key"]) #Key is stored in the environment variable as a base64 utf-8 encoded string. Decode into bytes for Fernet
             f = Fernet(key)#Should error for an invalid key
-            
             return True
         except:
             return False
