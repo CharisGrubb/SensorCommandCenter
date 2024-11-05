@@ -28,9 +28,8 @@ async def get_sensor_list(username: Annotated[str | None, Header()] = None, pass
     else:
         try:
             db = InternalDBConnection()
-            db.connect()
             sensors = db.get_all_sensors()
-            db.close_connection()
+           
             return {"results" : sensors}
         except:
             #Log error to database with traceback details

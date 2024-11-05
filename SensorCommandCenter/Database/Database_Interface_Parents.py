@@ -11,9 +11,10 @@ class InternalDB():
        self.conn = None
 
     def __connect(self):
-        if os.path.exists("Database/internal_sensor_database.db"):
-            self.conn = sqlite3.connect("Database/internal_sensor_database.db")
+        if os.path.exists("SensorCommandCenter/Database/internal_sensor_database.db"):
+            self.conn = sqlite3.connect("SensorCommandCenter/Database/internal_sensor_database.db")
         else:
+            print(os.curdir)
             raise Exception("NO INTERNAL DB", os.getcwd())
         
     def __close_connection(self):

@@ -9,5 +9,5 @@ python -m pip install -r  SensorCommandCenter\requirements.txt
 
 python "SensorCommandCenter\Install Scripts\Database Files\SQLite (Internal)\database_set_up.py" #Run Internal database install
 
-fastapi dev main.py #Set for dev currently as testing
+fastapi dev SensorCommandCenter\main.py #Set for dev currently as testing
 

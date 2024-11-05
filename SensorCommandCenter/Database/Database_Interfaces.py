@@ -55,16 +55,18 @@ class InternalDBConnection(Database_Interface_Parents.InternalDB):
 
     def add_user(self, username:str, user_f_name:str, user_l_name:str, pw:str, role:str = 'Standard User'):
         #validate parameters
+        
         IOValidation.InputOutputValidation.validate_user_name(username) #If it fails, error will be raised
         IOValidation.InputOutputValidation.validate_user_first_last_name(user_f_name, user_l_name)
         #encrypt pw, parameter should already be hashed
 
-
+        print(dir(self))
         #insert into the db 
-        self.__connect()
+        self._InternalDB__connect()
+        print(self.conn)
         new_user_id = uuid.uuid4()
 
-        self.__close_connection()
+        self._InternalDB__close_connection()
 
     def get_password_hash(self, username:str):
 
@@ -103,6 +105,7 @@ class InternalDBConnection(Database_Interface_Parents.InternalDB):
         pass
 
     def get_all_sensors(self):
+        self._InternalDB__connect()
         if self.conn is not None:
             crs = self.conn.cursor()
             crs.execute("""SELECT sensor_id,sensor_name,sensor_model,sensor_type ,import_type, sensor_enabled int, create_date ,created_by, modify_date ,modified_by
@@ -111,6 +114,7 @@ class InternalDBConnection(Database_Interface_Parents.InternalDB):
             headers =[x[0] for x in crs.description]
             results = self.__convert_results_to_json(resultsset, headers)
             self.conn.commit()
+            self._InternalDB__close_connection()
             return results
 
     def get_all_model_sensors(self, model):
