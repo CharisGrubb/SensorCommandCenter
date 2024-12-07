@@ -78,15 +78,17 @@ class InputOutputValidation:
         if check_for_disallowed_characters:
             raise Exception("Invalid character [" + check_for_disallowed_characters.group()+ "] detected in Sensor Name: {sensor_name}")
         
-
         return sensor_name
+
+
 
 ##ENCryptor and DECryptor
 class Ryptor:
 
     @staticmethod
     def encrypt(data_to_encrypt:str):
-      
+        if data_to_encrypt is None or  data_to_encrypt == '':
+            return None
         
         key = os.environ.get('SCC_ENC_Key')
         f = Fernet(key)
@@ -99,7 +101,8 @@ class Ryptor:
     
     @staticmethod
     def decrypt(data_to_decrypt:str):
-        
+        if data_to_decrypt is None:
+            return None 
         
         key = os.environ.get('SCC_ENC_Key')
         f = Fernet(key)
