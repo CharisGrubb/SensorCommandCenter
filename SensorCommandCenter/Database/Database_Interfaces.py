@@ -68,6 +68,12 @@ class InternalDBConnection(Database_Interface_Parents.InternalDB):
 
         self._InternalDB__close_connection()
 
+
+    def check_for_enabled_admin(self):
+        self._InternalDB__connect()
+        query = """SELECT Count(1) FROM dbo.Users WHERE Account_type = 'Global Admin' and ISNULL(access_until, GETDATE() +1) > GETDATE()"""
+        self._InternalDB__close_connection()
+
     def get_password_hash(self, username:str):
 
         #validate username for any unsafe characters
