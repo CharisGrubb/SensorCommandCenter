@@ -1,7 +1,7 @@
 import traceback
 
 from datetime import datetime
-from Database.Database_Interface_Parents import InternalDB
+from SensorCommandCenter.Database.Database_Interface_Parents import InternalDB
 
 
 

@@ -4,8 +4,8 @@ import sqlalchemy #used for external db connection
 import traceback
 import os
 
-from Database import IOValidation, Database_Interface_Parents
-from Logging.Logger import Log
+from SensorCommandCenter.Database import IOValidation, Database_Interface_Parents
+from SensorCommandCenter.Logging.Logger import Log
 
        
 

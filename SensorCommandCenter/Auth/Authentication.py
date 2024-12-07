@@ -1,6 +1,6 @@
 from fastapi import Depends, HTTPException, status
-from Database.Database_Interfaces import InternalDBConnection
-from Logging.Logger import Log
+from SensorCommandCenter.Database.Database_Interfaces import InternalDBConnection
+from SensorCommandCenter.Logging.Logger import Log
 
 
 import bcrypt 

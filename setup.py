@@ -5,8 +5,8 @@ import tkinter.messagebox
 import tkinter.simpledialog 
 import traceback
 
-from Auth.Authentication import AuthHandler
-from Database.Database_Interfaces import InternalDBConnection, IOValidation
+from SensorCommandCenter.Auth.Authentication import AuthHandler
+from SensorCommandCenter.Database.Database_Interfaces import InternalDBConnection, IOValidation
 
 
 
