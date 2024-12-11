@@ -48,39 +48,39 @@ elif tkinter.messagebox.askquestion("Rotate Keys?","""Would you like to rotate e
 #Check for existing admin user that is enabled. 
 
 
-
-#Prompt user for the default Username/password internal account:
-username = None
-pw = None
-error_msg=''
-while username is None:
-    username = tkinter.simpledialog.askstring("Internal Admin Username",error_msg + "What username would you like for the built in administrative account:")
-    #Call username validation
-    try:
-        IOValidation.InputOutputValidation.validate_user_name(username)
-    except:
-        username = None
-        error_msg="Invalid username. Please, try again..."
-error_msg=''
-while pw is None:    
-    try: #### SEE IF TYPING CAN DO THE MASKING DOTS IN THIS...with button for showing password? 
-        pw = tkinter.simpledialog.askstring(f"Internal Admin Password",error_msg + """What password would you like for {username}:
-                                            \n Password Requirements include at least 1 capital/upper case letter, 1 lower case letter, 1 number, 
-                                            and 1 special character [Options: !, @, #, $, %, &, *, +, =, _, or -]""")
-        #call password validation
-        IOValidation.InputOutputValidation.validate_user_pw(pw)
-    except:
-        print(traceback.format_exc())
-        pw = None
-        error_msg = "Invalid password. Please, try again..."
-
-
-#hash pw
-pw_hash = AuthHandler.hash_data(pw)
+if db.check_for_enabled_admin():
+    #Prompt user for the default Username/password internal account:
+    username = None
+    pw = None
+    error_msg=''
+    while username is None:
+        username = tkinter.simpledialog.askstring("Internal Admin Username",error_msg + "What username would you like for the built in administrative account:")
+        #Call username validation
+        try:
+            IOValidation.InputOutputValidation.validate_user_name(username)
+        except:
+            username = None
+            error_msg="Invalid username. Please, try again..."
+    error_msg=''
+    while pw is None:    
+        try: #### SEE IF TYPING CAN DO THE MASKING DOTS IN THIS...with button for showing password? 
+            pw = tkinter.simpledialog.askstring(f"Internal Admin Password",error_msg + """What password would you like for {username}:
+                                                \n Password Requirements include at least 1 capital/upper case letter, 1 lower case letter, 1 number, 
+                                                and 1 special character [Options: !, @, #, $, %, &, *, +, =, _, or -]""")
+            #call password validation
+            IOValidation.InputOutputValidation.validate_user_pw(pw)
+        except:
+            print(traceback.format_exc())
+            pw = None
+            error_msg = "Invalid password. Please, try again..."
 
 
-#store pw in database, creating user
-db.add_user(username, 'Internal','Administrator', pw, 'Global Admin')
+    #hash pw
+    pw_hash = AuthHandler.hash_data(pw)
+
+
+    #store pw in database, creating user
+    db.add_user(username, 'Internal','Administrator', pw, 'Global Admin')
 
 
 

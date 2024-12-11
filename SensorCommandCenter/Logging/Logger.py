@@ -1,3 +1,4 @@
+import os
 import traceback
 
 from datetime import datetime
@@ -21,13 +22,38 @@ class Log:
             self.__store_in_queue()
 
     #Private acting method to store log into txt file if internal database is unavailable for some reason
-    def __store_in_queue(self):
-        print('In store to queue')
-        pass 
+    def __store_in_queue(self, message, level, log_time, log_type, user_id):
+
+        with open(os.path.dirname(__file__)+'Log_Queue.txt','a') as f: #!!!!TEST the OS package working in docker and other OS systems 
+            f.write(str(log_time) + '---' +message + '---' + level + '---' + log_type + '---' + self.source + '---' + self.name + '---' + str(user_id))
+            f.close()
 
     #Read from txt file and push to internal db
-    def __push_from_queue_to_db(self):
-        pass
+    def __push_from_queue_to_db(self): ###!!!!!Investigate upgrading to a json file of stored logs....
+        
+        lines_to_rewrite = []
+        f = open(os.path.dirname(__file__)+'Log_Queue.txt','r')
+        for line in f:
+            try:
+                line_split = line.string().split('---')
+                Logger_DB.store_log(log_name = line_split[5]
+                                    , log_type = line_split[3]
+                                    , log_source = line_split[4]
+                                    , log_message = line_split[1]
+                                    , log_level = line_split[2]
+                                    ,log_datetime = line_split[0]
+                                    , user_id = line_split[6])
+            except:
+                lines_to_rewrite.append(line)
+        f.close()
+
+        if len(lines_to_rewrite):
+            f = open(os.path.dirname(__file__)+"/Log_Queue.txt",'w') ####!!!! TEST CONCUNRRENCY....ways to mitigate a loss of things going in and out at the same time
+            for line in lines_to_rewrite:
+                f.write(line)
+            
+            f.close()
+
 
 
 class Logger_DB(InternalDB):
