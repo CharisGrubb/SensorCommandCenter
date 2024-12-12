@@ -43,16 +43,16 @@ class Log:
                                     , log_level = line_split[2]
                                     ,log_datetime = line_split[0]
                                     , user_id = line_split[6])
-            except:
+            except: #If any lines fail to push to the database, add them to a list to rewrite to file
                 lines_to_rewrite.append(line)
         f.close()
 
-        if len(lines_to_rewrite):
+        if len(lines_to_rewrite): #If there are any lines to rewrite back, write them to the file. 'w' will overwrite what was there.
             f = open(os.path.dirname(__file__)+"/Log_Queue.txt",'w') ####!!!! TEST CONCUNRRENCY....ways to mitigate a loss of things going in and out at the same time
             for line in lines_to_rewrite:
                 f.write(line)
             
-            f.close()
+            f.close() #Always close your files and streams ;)
 
 
 
@@ -68,11 +68,11 @@ class Logger_DB(InternalDB):
         params = [user_id, log_message, log_level, log_type, log_source, log_name, log_datetime]
 
         crs = self.conn.cursor()
+        
         crs.execute(query,  params) 
         rows_affected = crs.rowcount
-        print(rows_affected)
-        self.conn.commit()
 
+        self.conn.commit()
         self.__close_connection()
 
         return rows_affected

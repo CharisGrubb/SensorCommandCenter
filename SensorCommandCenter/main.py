@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from API.routers import GUIInterface, sensors, users
+from SensorCommandCenter.API.routers import GUIInterface, sensors, users
 app = FastAPI()
 
 

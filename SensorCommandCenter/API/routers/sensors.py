@@ -1,4 +1,4 @@
-from Database.Database_Interfaces import InternalDBConnection
+from SensorCommandCenter.Database.Database_Interfaces import InternalDBConnection
 from fastapi import APIRouter, Depends, Header, HTTPException
 
 from pydantic import BaseModel
@@ -23,6 +23,8 @@ router = APIRouter()
 async def get_sensor_list(username: Annotated[str | None, Header()] = None, password: Annotated[str | None, Header()] = None):
     print("Inside get Sensor list")
     #Authenticate User first
+
+
     if username is None:
         raise HTTPException(status_code = 401, detail='Unauthorized')
     else:
@@ -33,6 +35,7 @@ async def get_sensor_list(username: Annotated[str | None, Header()] = None, pass
             return {"results" : sensors}
         except:
             #Log error to database with traceback details
+            print(traceback.format_exc())
             raise HTTPException(status_code=500, detail="Error occured. Contact administrator.")
 
     
