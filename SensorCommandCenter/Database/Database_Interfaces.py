@@ -136,11 +136,11 @@ class InternalDBConnection(Database_Interface_Parents.InternalDB):
         headers =[x[0] for x in crs.description]
         results = self.__convert_results_to_json(resultsset, headers)
         self.conn.commit()
-        self.__close_connection()
+        self._InternalDB__close_connection()
         return results
 
-    def get_configurations(self, config_name, category, sub_category): 
-        self.conn.__connect()
+    def get_configurations(self, config_name, category = None, sub_category = None): 
+        self._InternalDB__connect()
         crs = self.conn.cursor()
         crs.execute("""SELECT *
                     FROM Configs;""") ####CHANGE TO HEADER NAMES...testing
@@ -148,7 +148,7 @@ class InternalDBConnection(Database_Interface_Parents.InternalDB):
         headers =[x[0] for x in crs.description]
         results = self.__convert_results_to_json(resultsset, headers)
         self.conn.commit()
-        self.__close_connection()
+        self._InternalDB__close_connection()
         return results
          
     def set_sensor_enabled(self,sensor_id, enabled):

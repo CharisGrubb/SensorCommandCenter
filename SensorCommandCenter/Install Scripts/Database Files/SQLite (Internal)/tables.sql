@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS Users(
     ,create_date datetime default CURRENT_TIMESTAMP
     ,CHECK(typeof("user_id") = "text" and length("user_id" <=50)) -- Check to control the length of the uuid for data integrity. UUIDs currently are about 36 characters. Allowing extra space for newer uuid types(Security scalability)
     ,CHECK(typeof("user_middle_initial") = "text" and length("user_middle_initial" <=2)) 
-  
+    ,UNIQUE(username)
   );
 
 

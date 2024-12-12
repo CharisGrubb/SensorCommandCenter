@@ -1,6 +1,8 @@
-from fastapi import Depends, HTTPException, status
+from fastapi import  HTTPException, Depends
+from fastapi.security import HTTPBasic, HTTPBasicCredentials
 from SensorCommandCenter.Database.Database_Interfaces import InternalDBConnection
 from SensorCommandCenter.Logging.Logger import Log
+from typing import Annotated
 
 
 import bcrypt 
@@ -10,7 +12,7 @@ import traceback
 
 
 class AuthHandler: 
-
+    security = HTTPBasic()
     def __init__(self):
         self.db = InternalDBConnection()
         self.configs = self.db.get_configurations("Authentication") #Get internal and/or any external configurations configured
@@ -18,9 +20,11 @@ class AuthHandler:
      
         
 
-    def authenticate_user(self,username:str, password:str):
+    def authenticate_user(self,credentials: Annotated[HTTPBasicCredentials, Depends(security)]):
        
-
+        username = credentials.username.encode("utf8")
+        password = credentials.password.encode("utf8")
+        print('inside for authenticate user', username)
         if username is None or password is None:
             raise HTTPException(status_code=401,detail="Incorrect username or password.", headers={"WWWAuthenticate":"Basic"})
         
@@ -35,16 +39,22 @@ class AuthHandler:
         ##If internal account...get password hash and check digest
         elif user_account_type == "Internal":
             user_pw_hash = self.db.get_password_hash(username)
-            user_authenticated = bcrypt.checkpw(password.encode('utf-8'),user_pw_hash)
+            user_authenticated = bcrypt.checkpw(password,user_pw_hash)
 
        
         ##Else...connect/call integration to others
 
-        self.log.log_to_database("Authentication", username + " authenticated: " + str(user_authenticated)+ " via " + user_account_type, "ERROR", None)
-        
-        return user_authenticated
+        self.log.log_to_database("Authentication", username + " authenticated: " + str(user_authenticated)+ " via " + user_account_type, "INFO", None)
+        if user_authenticated is True:
+            return username
+        else:
+            raise HTTPException(status_code=401,detail="Incorrect username or password.", headers={"WWWAuthenticate":"Basic"})
     
-    
+    def check_user_access(self, access_required = 'ADURC'):
+        access_map = 'ADURC'
+        user_access_b = '00011' #ADURC 
+        user_access_t = "".join(access_level for access_level in access_map if user_access_b[access_map.index(access_level)]==1)
+        print(user_access_t)
 
     #central point for hashing, allowing updates 
     @staticmethod 

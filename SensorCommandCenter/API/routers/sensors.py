@@ -1,3 +1,4 @@
+from SensorCommandCenter.Auth.Authentication import AuthHandler
 from SensorCommandCenter.Database.Database_Interfaces import InternalDBConnection
 from fastapi import APIRouter, Depends, Header, HTTPException
 
@@ -18,12 +19,13 @@ class Sensor(BaseModel):
 ############################################# API ENDPOINT DEFINITION ###################################################################
 
 router = APIRouter()
+auth_handler = AuthHandler()
 
 @router.get("/sensors", tags=["sensors"])
-async def get_sensor_list(username: Annotated[str | None, Header()] = None, password: Annotated[str | None, Header()] = None):
-    print("Inside get Sensor list")
-    #Authenticate User first
-
+async def get_sensor_list(username: Annotated[str,Depends(auth_handler.authenticate_user)]):
+    
+    #Check Access Level
+    auth_handler.check_user_access(access_required='R') #Check for read status
 
     if username is None:
         raise HTTPException(status_code = 401, detail='Unauthorized')
