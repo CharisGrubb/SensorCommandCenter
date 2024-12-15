@@ -14,12 +14,13 @@ class Log:
 
     def log_to_database(self, log_type, message, log_level, user_id = None):
         try:
-            self.db.store_log(self.name, log_type, self.source, message, log_level,str(datetime.now()) , user_id)
+            log_time = str(datetime.now())
+            self.db.store_log(self.name, log_type, self.source, message, log_level, log_time , user_id)
             self.__push_from_queue_to_db()
             self.db.close_connection()
         except:
             print(traceback.format_exc())
-            self.__store_in_queue()
+            self.__store_in_queue(message, log_level, log_time,user_id)
 
     #Private acting method to store log into txt file if internal database is unavailable for some reason
     def __store_in_queue(self, message, level, log_time, log_type, user_id):
@@ -59,7 +60,7 @@ class Log:
 class Logger_DB(InternalDB):
      #Inheritance, child of InternalDB conn
     def store_log(self, log_name, log_type, log_source, log_message, log_level,log_datetime, user_id:str=None):
-        self.__connect()
+        self._InternalDB__connect()
 
 
         query = """INSERT INTO logs ( user_id, log_note, log_level ,log_type ,log_source ,log_name ,create_date)
@@ -73,7 +74,7 @@ class Logger_DB(InternalDB):
         rows_affected = crs.rowcount
 
         self.conn.commit()
-        self.__close_connection()
+        self._InternalDB__close_connection()
 
         return rows_affected
 

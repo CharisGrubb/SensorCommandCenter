@@ -21,7 +21,7 @@ class AuthHandler:
         
 
     def authenticate_user(self,credentials: Annotated[HTTPBasicCredentials, Depends(security)]):
-       
+        #!!!!Look into lockout after so many failed attempts
         username = credentials.username.encode("utf8")
         password = credentials.password.encode("utf8")
         print('inside for authenticate user', username)

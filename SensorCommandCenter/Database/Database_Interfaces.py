@@ -30,9 +30,9 @@ class InternalDBConnection(Database_Interface_Parents.InternalDB):
 
     def add_sensor(self, sensor_name, sensor_model, sensor_type, import_type, create_user_id):
          
-        self.__connect()
+        self._InternalDB__connect()
         try:
-            new_sensor_id = uuid.uuid4()
+            new_sensor_id = str(uuid.uuid4())
 
             query = """INSERT INTO Sensors ( sensor_id, sensor_name, sensor_model, sensor_type, import_type 
                                             ,sensor_enabled, create_date, created_by)
@@ -41,10 +41,10 @@ class InternalDBConnection(Database_Interface_Parents.InternalDB):
             params = [new_sensor_id, sensor_name, sensor_model, sensor_type, import_type, create_user_id]
 
             crs = self.conn.cursor()
-            crs.execute(query, parameters = params) 
+            crs.execute(query, params) 
             rows_affected = crs.rowcount
             self.conn.commit()
-            self.__close_connection()
+            self._InternalDB__close_connection()
             return rows_affected
         except:
             #Pipe opperator (|) used in alerting. Alerts for certain logs will split at the pipe and only show the text6 before the pipe. This allows security around stack trace
@@ -127,7 +127,7 @@ class InternalDBConnection(Database_Interface_Parents.InternalDB):
         pass
 
     def get_all_type_sensors(self, sensor_type):
-        self.conn.__connect()
+        self._InternalDB__connect()
         crs = self.conn.cursor()
         crs.execute("""SELECT  sensor_id, sensor_name, sensor_model, import_type ,sensor_enabled
                     FROM Sensors
@@ -160,11 +160,22 @@ class InternalDBConnection(Database_Interface_Parents.InternalDB):
 
 
     def add_sensor_datapoint(self, sensor_id, value, datetime_collected):
-        pass
+
+        self._InternalDB__connect()
+        crs = self.conn.cursor()
+
+        query = """INSERT INTO Sensor_data_points (Sensor_ID, Val, Create_Date)
+                                                VALUES (? , ?, ?)"""
+        crs.execute(query, [sensor_id, value, datetime_collected])
+
+        rows_affected = crs.rowcount
+        self.conn.commit()
+        self._InternalDB__close_connection()
+
+        return rows_affected
 
     
 
-    
 
     
     def _update_encryptions(self):
@@ -198,9 +209,20 @@ class ExternalDB_MSSQL(Database_Interface_Parents.ExternalDBConnection):
 
 #Child
 class ExternalDB_MySQL(Database_Interface_Parents.ExternalDBConnection):
-    pass
+    def get_engine(self):
+        pass #Override engine with connection syntax specific to MySQL 
 
 
 #Child 
 class ExternalDB_SQLite(Database_Interface_Parents.ExternalDBConnection):
-    pass
+
+    ###!!!! Test SQLite connection hosted on another server/system
+    def get_engine(self):
+        pass #Override engine with connection syntax specific to SQLite  
+
+
+
+#Child 
+class ExternalDB_PosgreSQL(Database_Interface_Parents.ExternalDBConnection):
+    def get_engine(self):
+        pass #Override engine with connection syntax specific to Posgres 
