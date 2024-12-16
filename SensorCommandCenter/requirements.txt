@@ -1,5 +1,0 @@
-bcrypt==4.2.0
-cryptography==43.0.1
-fastapi[standard]==0.113.0
-requests==2.32.3
-sqlalchemy==2.0.34

@@ -2,3 +2,8 @@
 fastapi[all]==0.109.0
 uvicorn[standard]==0.27.0
 gunicorn==21.2.0
+bcrypt==4.2.0
+cryptography==43.0.1
+fastapi[standard]==0.113.0
+requests==2.32.3
+sqlalchemy==2.0.34
