@@ -75,19 +75,38 @@ class InternalDBConnection(Database_Interface_Parents.InternalDB):
         query = """SELECT Count(1) FROM dbo.Users WHERE Account_type = 'Global Admin' and ISNULL(access_until, GETDATE() +1) > GETDATE()"""
         self._InternalDB__close_connection()
 
+    #returns the unencrypted hashed password for INTERNAL users only. 
     def get_password_hash(self, username:str):
 
         #validate username for any unsafe characters
         IOValidation.InputOutputValidation.validate_user_name(username) #If it fails, error will be raised
+        self._InternalDB__connect()
         if  self.conn is not None:
-            query = """ """
+            query = """SELECT user_pw FROM dbo.Users WHERE username = ? AND Account_type = 'Internal'"""
+            crs = self.conn.cursor()
 
             #pull hash from database based on username
+            crs.execute(query, [username])
+            result = crs.fetchall()
+
+            crs.close()
+            self._InternalDB__close_connection()
 
             #decrypt has before returning
+            if len(result):
+                pw = IOValidation.Ryptor.decrypt(result[0][0])
+                return pw
+            else:
+                self.log.log_to_database("Authentication", f"No internal user {username} found.","ALERT")
+                raise Exception("No such internal user!")
+
         else:
             raise Exception("Not connected to database, cannot pull data!") #Raise error, do not return None or setinal value, it could be used to bypass controls
-    
+        
+       
+
+
+
     def get_user_account_type(self, username:str):
         
         IOValidation.InputOutputValidation.validate_user_name(username) #If it fails, error will be raised
