@@ -53,7 +53,7 @@ class InternalDBConnection(Database_Interface_Parents.InternalDB):
     
          
 
-    def add_user(self, username:str, user_f_name:str, user_l_name:str, pw:str, role:str = 'Standard User'):
+    def add_user(self, username:str, user_f_name:str, user_l_name:str, pw:str, access:str='R', access_until = None, account_type:str = 'Internal'):
         #validate parameters
         
         IOValidation.InputOutputValidation.validate_user_name(username) #If it fails, error will be raised
@@ -65,7 +65,8 @@ class InternalDBConnection(Database_Interface_Parents.InternalDB):
         self._InternalDB__connect()
         print(self.conn)
         new_user_id = uuid.uuid4()
-
+        query = """INSERT INTO dbo.Users (user_id, username, user_pw, user_f_name, user_l_name, user_middle_initial, access_level, access_until, account_type)
+                               VALUES(?,?,?,?,?,?,?,?,?) """
         self._InternalDB__close_connection()
 
 
