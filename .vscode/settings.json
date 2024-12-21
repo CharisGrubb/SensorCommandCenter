@@ -2,7 +2,7 @@
     "python.testing.unittestArgs": [
         "-v",
         "-s",
-        "./SensorCommandCenter",
+        ".",
         "-p",
         "*_test.py"
     ],

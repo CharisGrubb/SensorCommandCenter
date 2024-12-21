@@ -72,8 +72,16 @@ class InternalDBConnection(Database_Interface_Parents.InternalDB):
 
     def check_for_enabled_admin(self):
         self._InternalDB__connect()
-        query = """SELECT Count(1) FROM dbo.Users WHERE Account_type = 'Global Admin' and ISNULL(access_until, GETDATE() +1) > GETDATE()"""
+        query = """SELECT Count(1) FROM Users WHERE Account_type = 'Global Admin' and coalesce(access_until, CURRENT_TIMESTAMP +1) > CURRENT_TIMESTAMP"""
+        crs = self.conn.cursor()
+        crs.execute(query)
+        results = crs.fetchall()
         self._InternalDB__close_connection()
+
+        if results is not None and len(results):
+            return results[0][0]
+        else:
+            return False
 
     #returns the unencrypted hashed password for INTERNAL users only. 
     def get_password_hash(self, username:str):
@@ -104,7 +112,21 @@ class InternalDBConnection(Database_Interface_Parents.InternalDB):
             raise Exception("Not connected to database, cannot pull data!") #Raise error, do not return None or setinal value, it could be used to bypass controls
         
        
+    
+    def get_all_users(self):
+        self._InternalDB__connect()
+        if self.conn is not None: 
+            query = """SELECT Username FROM dbo.Users"""
+            crs = self.conn.cursor()
 
+            crs.execute(query)
+            result = crs.fetchall()
+            
+            if result is not None and len(result):
+                headers = [x[0] for x in crs.description]
+                return self.__convert_results_to_json(result)
+            else:
+                return None
 
 
     def get_user_account_type(self, username:str):

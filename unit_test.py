@@ -34,6 +34,14 @@ class db_tests(unittest.TestCase):
             self.assertEqual(1, self.db.add_sensor_datapoint(sensors[0]['sensor_id'],33.3,datetime.datetime.now()) )
         else: 
             raise Exception("No sensors added in order to test data point insert.")
+        
+    def test_getting_password_hash(self):
+
+        users = self.db.get_all_users()
+        if users is None or not len(users):
+            raise Exception("No users for testing password hash")
+        for user in users:
+            self.assertIsNotNone(self.db.get_password_hash(user['username']))
 
 
 if __name__ == '__main__':
