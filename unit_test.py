@@ -1,4 +1,4 @@
-
+from SensorCommandCenter.Auth.Authentication import AuthHandler
 from SensorCommandCenter.Database.IOValidation import InputOutputValidation as IOV
 from SensorCommandCenter.Database import Database_Interfaces
 import unittest 
@@ -14,6 +14,11 @@ class Authorization_Tests(unittest.TestCase):
     def test_invalid_username(self):
         # from SensorCommandCenter.Database.IOValidation import InputOutputValidation
         self.assertRaises(Exception, IOV.validate_user_name, "' OR 1=1--")
+
+    def test_access_conversions(self):
+      
+        self.assertEqual(1,AuthHandler.convert_access_to_int('C'))
+       
 
 class db_tests(unittest.TestCase):
     db = Database_Interfaces.InternalDBConnection()

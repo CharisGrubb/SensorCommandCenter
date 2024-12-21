@@ -56,6 +56,17 @@ class AuthHandler:
         user_access_t = "".join(access_level for access_level in access_map if user_access_b[access_map.index(access_level)]==1)
         print(user_access_t)
 
+    @staticmethod 
+    def convert_access_to_int(access_string):
+        access_map = 'CRUDA' #CRUD-A ...Create, Read, Update, Delete, ADMIN 
+        access_int = 0
+        for access_letter in access_string:
+            access_int += 2**access_map.index(access_letter)
+            
+        return access_int
+
+
+
     #central point for hashing, allowing updates 
     @staticmethod 
     def hash_data(data_to_hash:str):

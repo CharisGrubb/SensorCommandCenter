@@ -53,20 +53,26 @@ class InternalDBConnection(Database_Interface_Parents.InternalDB):
     
          
 
-    def add_user(self, username:str, user_f_name:str, user_l_name:str, pw:str, access:str='R', access_until = None, account_type:str = 'Internal'):
+    def add_user(self, username:str, user_f_name:str, user_l_name:str, pw:str, access:str='R', access_until = None, account_type:str = 'Internal', user_m_initial:str = None):
         #validate parameters
-        
         IOValidation.InputOutputValidation.validate_user_name(username) #If it fails, error will be raised
         IOValidation.InputOutputValidation.validate_user_first_last_name(user_f_name, user_l_name)
-        #encrypt pw, parameter should already be hashed
 
-        print(dir(self))
+        #encrypt pw, parameter should already be hashed
+        pw = IOValidation.Ryptor.encrypt(pw)
+
+        #Convert Access string to integer for storage
+      
         #insert into the db 
         self._InternalDB__connect()
-        print(self.conn)
+        crs = self.conn.cursor()
+
         new_user_id = uuid.uuid4()
         query = """INSERT INTO dbo.Users (user_id, username, user_pw, user_f_name, user_l_name, user_middle_initial, access_level, access_until, account_type)
                                VALUES(?,?,?,?,?,?,?,?,?) """
+        
+        # crs.execute(query, [new_user_id, username, pw, user_f_name, user_l_name, user_m_initial])
+
         self._InternalDB__close_connection()
 
 
