@@ -116,7 +116,7 @@ class InternalDBConnection(Database_Interface_Parents.InternalDB):
     def get_all_users(self):
         self._InternalDB__connect()
         if self.conn is not None: 
-            query = """SELECT Username FROM dbo.Users"""
+            query = """SELECT Username FROM Users"""
             crs = self.conn.cursor()
 
             crs.execute(query)

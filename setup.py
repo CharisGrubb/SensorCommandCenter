@@ -48,7 +48,7 @@ elif tkinter.messagebox.askquestion("Rotate Keys?","""Would you like to rotate e
 #Check for existing admin user that is enabled. 
 
 
-if db.check_for_enabled_admin() is True: #Explicit check to avoid truthy values
+if not db.check_for_enabled_admin(): #Explicit check to avoid truthy values
     #Prompt user for the default Username/password internal account:
     username = None
     pw = None
