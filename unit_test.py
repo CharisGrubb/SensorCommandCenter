@@ -22,7 +22,7 @@ class Authorization_Tests(unittest.TestCase):
 
        
 
-class db_tests(unittest.TestCase):
+class DB_Tests(unittest.TestCase):
     db = Database_Interfaces.InternalDBConnection()
 
     def test_input_injection(self):

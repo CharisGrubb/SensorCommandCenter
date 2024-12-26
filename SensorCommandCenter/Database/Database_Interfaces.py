@@ -4,6 +4,7 @@ import sqlalchemy #used for external db connection
 import traceback
 import os
 
+from SensorCommandCenter.Auth.Authentication import AuthHandler
 from SensorCommandCenter.Database import IOValidation, Database_Interface_Parents
 from SensorCommandCenter.Logging.Logger import Log
 
@@ -62,18 +63,27 @@ class InternalDBConnection(Database_Interface_Parents.InternalDB):
         pw = IOValidation.Ryptor.encrypt(pw)
 
         #Convert Access string to integer for storage
+        access_int = AuthHandler.convert_access_to_int(access)
       
         #insert into the db 
         self._InternalDB__connect()
         crs = self.conn.cursor()
 
         new_user_id = uuid.uuid4()
-        query = """INSERT INTO dbo.Users (user_id, username, user_pw, user_f_name, user_l_name, user_middle_initial, access_level, access_until, account_type)
-                               VALUES(?,?,?,?,?,?,?,?,?) """
+        query = """INSERT INTO Users (user_id, username, user_pw, user_f_name, user_l_name, user_middle_initial,
+                                         access_level, access_until, account_type)
+                               VALUES(?,?,?,?,?,?
+                                        ,?,?,?) """
         
-        # crs.execute(query, [new_user_id, username, pw, user_f_name, user_l_name, user_m_initial])
+        crs.execute(query, [new_user_id, username, pw, user_f_name, user_l_name, user_m_initial
+                                ,access_int, access_until, account_type])
+        
+        rows_affected = crs.rowcount
+        self.conn.commit()
 
         self._InternalDB__close_connection()
+
+        return rows_affected
 
 
     def check_for_enabled_admin(self):
