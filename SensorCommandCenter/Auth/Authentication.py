@@ -22,6 +22,7 @@ class AuthHandler:
 
     def authenticate_user(self,credentials: Annotated[HTTPBasicCredentials, Depends(security)]):
         #!!!!Look into lockout after so many failed attempts
+
         username = credentials.username.encode("utf8")
         password = credentials.password.encode("utf8")
         print('inside for authenticate user', username)
@@ -29,8 +30,8 @@ class AuthHandler:
             raise HTTPException(status_code=401,detail="Incorrect username or password.", headers={"WWWAuthenticate":"Basic"})
         
         ####get user acount type from username
-        user_account_type= self.db.get_user_account_type(username)
-        user_authenticated=False
+        user_account_type = self.db.get_user_account_type(username)
+        user_authenticated = False
        
         ####If user doesn't exist (NONE returned), raise 401 error
         if user_account_type is None:
@@ -50,11 +51,15 @@ class AuthHandler:
         else:
             raise HTTPException(status_code=401,detail="Incorrect username or password.", headers={"WWWAuthenticate":"Basic"})
     
-    def check_user_access(self, access_required = 'ADURC'):
-        access_map = 'ADURC'
-        user_access_b = '00011' #ADURC 
-        user_access_t = "".join(access_level for access_level in access_map if user_access_b[access_map.index(access_level)]==1)
-        print(user_access_t)
+    def check_user_access(self, username,  access_required = 'CRUDA'):
+        #Get users int access
+        users_int_access = 1
+        #Convert user int access to string
+        users_access_string = AuthHandler.convert_int_to_access(users_int_access)
+
+        if access_required in users_access_string: #Access may require just 'R' for read, and user may have 'CR' create and read access. 
+            return True
+        return False
 
     @staticmethod 
     def convert_access_to_int(access_string):
@@ -62,9 +67,20 @@ class AuthHandler:
         access_int = 0
         for access_letter in access_string:
             access_int += 2**access_map.index(access_letter)
-            
+
         return access_int
 
+    @staticmethod 
+    def convert_int_to_access(access_int):
+        access_map = 'CRUDA' #CRUD-A ...Create, Read, Update, Delete, ADMIN 
+        access_binary_string = str(bin(access_int))[2:] #The binary string starts with 0b...removing to hold just the bits. (Example: 0b1111 to 1111 for looping)
+        access_string = ''
+        
+        for index in range(len(access_binary_string)):
+            if access_binary_string[index] == '1':
+                access_string += access_map[index]
+        
+        return access_string
 
 
     #central point for hashing, allowing updates 

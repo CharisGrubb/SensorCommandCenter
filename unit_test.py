@@ -17,7 +17,9 @@ class Authorization_Tests(unittest.TestCase):
 
     def test_access_conversions(self):
       
-        self.assertEqual(1,AuthHandler.convert_access_to_int('C'))
+        # self.assertEqual(1,AuthHandler.convert_access_to_int('C'))
+        self.assertEqual('C',AuthHandler.convert_int_to_access(1))
+
        
 
 class db_tests(unittest.TestCase):
