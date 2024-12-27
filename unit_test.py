@@ -43,12 +43,14 @@ class DB_Tests(unittest.TestCase):
             raise Exception("No sensors added in order to test data point insert.")
         
     def test_getting_password_hash(self):
-
+        print("GO GET USERS")
         users = self.db.get_all_users()
+        print('USERS',users)
         if users is None or not len(users):
             raise Exception("No users for testing password hash")
         for user in users:
-            self.assertIsNotNone(self.db.get_password_hash(user['username']))
+            with self.subTest(user=user):
+                self.assertIsNotNone(self.db.get_password_hash(user['username']), f"No PW for user {user['username']}")
 
 
 if __name__ == '__main__':

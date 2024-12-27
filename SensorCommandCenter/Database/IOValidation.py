@@ -90,7 +90,7 @@ class Ryptor:
         if data_to_encrypt is None or  data_to_encrypt == '':
             return None
         
-        key = os.environ.get('SCC_ENC_Key')
+        key = base64.b64decode(os.environ.get('SCC_ENC_Key').encode('utf-8'))
         f = Fernet(key)
         token = f.encrypt(data_to_encrypt.encode('utf-8'))
 
@@ -104,7 +104,7 @@ class Ryptor:
         if data_to_decrypt is None:
             return None 
         
-        key = os.environ.get('SCC_ENC_Key')
+        key = base64.b64decode(os.environ.get('SCC_ENC_Key').encode('utf-8'))
         f = Fernet(key)
         token = f.decrypt(data_to_decrypt.encode('utf-8'))
 

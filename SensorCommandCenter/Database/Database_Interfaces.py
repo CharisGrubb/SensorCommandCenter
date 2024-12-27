@@ -4,7 +4,6 @@ import sqlalchemy #used for external db connection
 import traceback
 import os
 
-from SensorCommandCenter.Auth.Authentication import AuthHandler
 from SensorCommandCenter.Database import IOValidation, Database_Interface_Parents
 from SensorCommandCenter.Logging.Logger import Log
 
@@ -54,7 +53,7 @@ class InternalDBConnection(Database_Interface_Parents.InternalDB):
     
          
 
-    def add_user(self, username:str, user_f_name:str, user_l_name:str, pw:str, access:str='R', access_until = None, account_type:str = 'Internal', user_m_initial:str = None):
+    def add_user(self, username:str, user_f_name:str, user_l_name:str, pw:str, access:int=0, access_until = None, account_type:str = 'Internal', user_m_initial:str = None):
         #validate parameters
         IOValidation.InputOutputValidation.validate_user_name(username) #If it fails, error will be raised
         IOValidation.InputOutputValidation.validate_user_first_last_name(user_f_name, user_l_name)
@@ -62,8 +61,7 @@ class InternalDBConnection(Database_Interface_Parents.InternalDB):
         #encrypt pw, parameter should already be hashed
         pw = IOValidation.Ryptor.encrypt(pw)
 
-        #Convert Access string to integer for storage
-        access_int = AuthHandler.convert_access_to_int(access)
+      
       
         #insert into the db 
         self._InternalDB__connect()
@@ -76,7 +74,7 @@ class InternalDBConnection(Database_Interface_Parents.InternalDB):
                                         ,?,?,?) """
         
         crs.execute(query, [new_user_id, username, pw, user_f_name, user_l_name, user_m_initial
-                                ,access_int, access_until, account_type])
+                                ,access, access_until, account_type])
         
         rows_affected = crs.rowcount
         self.conn.commit()
@@ -137,12 +135,13 @@ class InternalDBConnection(Database_Interface_Parents.InternalDB):
 
             crs.execute(query)
             result = crs.fetchall()
-            
+            print("QUERY RESULTS: ", result)
             if result is not None and len(result):
                 headers = [x[0] for x in crs.description]
                 return self.__convert_results_to_json(result)
             else:
                 return None
+        self._InternalDB__close_connection()
 
 
     def get_user_account_type(self, username:str):
