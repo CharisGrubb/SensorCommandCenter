@@ -89,12 +89,11 @@ class Ryptor:
     def encrypt(data_to_encrypt:str):
         if data_to_encrypt is None or  data_to_encrypt == '':
             return None
-        
-        key = base64.b64decode(os.environ.get('SCC_ENC_Key').encode('utf-8'))
-        f = Fernet(key)
-        token = f.encrypt(data_to_encrypt.encode('utf-8'))
-
-        return token
+        with open('enc_key.key', 'rb') as filekey:
+            key = filekey.read()
+            f = Fernet(key)
+            token = f.encrypt(data_to_encrypt.encode('utf-8'))
+            return token
 
      
 
@@ -103,22 +102,23 @@ class Ryptor:
     def decrypt(data_to_decrypt:str):
         if data_to_decrypt is None:
             return None 
-        
-        key = base64.b64decode(os.environ.get('SCC_ENC_Key').encode('utf-8'))
-        f = Fernet(key)
-        token = f.decrypt(data_to_decrypt.encode('utf-8'))
+   
+        with open('enc_key.key', 'rb') as filekey:
+            key = filekey.read()
+            f = Fernet(key)
+            token = f.decrypt(data_to_decrypt.decode('utf-8'))
 
-        return token
+            return token
 
     
     @staticmethod 
     def load_encryption_key():
         try:
-            print('Load Encryption key')
-            key = Fernet.generate_key()
-
-            os.environ["SCC_ENC_Key"] = base64.b64encode(key).decode('utf-8') #Environment variables have to be string, encode and convert to string
-
+            
+            with open('enc_key.key', 'wb') as filekey:
+                key = Fernet.generate_key()
+                filekey.write(key)
+            
             return True
         except:
             return False
@@ -126,10 +126,10 @@ class Ryptor:
     @staticmethod 
     def check_for_encryption_key():
         try:
-
-            key = base64.b64decode(os.environ["SCC_ENC_Key"]) #Key is stored in the environment variable as a base64 utf-8 encoded string. Decode into bytes for Fernet
-            f = Fernet(key)#Should error for an invalid key
-            return True
+            with open('enc_key.key', 'rb') as filekey:
+                key = filekey.read()
+                f = Fernet(key)#Should error for an invalid key
+                return True
         except:
             return False
 

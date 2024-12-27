@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS Users(
     ,user_pw text NOT NULL -- System to use Salt, hashing, and encryption  before store. SQLite does not support encryption on specific table or columns
     ,user_f_name text
     ,user_l_name text 
-    ,user_middle_initial text --additional distinguisher for clients for cases of two users with same first and last name
+    ,user_middle_initial text NULL--additional distinguisher for clients for cases of two users with same first and last name
     ,access_level INT NOT NULL DEFAULT 0 --CRUD operations Binary/bitwise map. READ=1, CREATE=2,UPDATE=4,DELETE=8 
     ,access_until datetime null --fill in if it's a temp access, NULL if until whenever
     ,account_type text --Service Account, ALT Acount, AD account, internal account, etc

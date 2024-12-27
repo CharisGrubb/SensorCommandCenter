@@ -53,7 +53,7 @@ class InternalDBConnection(Database_Interface_Parents.InternalDB):
     
          
 
-    def add_user(self, username:str, user_f_name:str, user_l_name:str, pw:str, access:int=0, access_until = None, account_type:str = 'Internal', user_m_initial:str = None):
+    def add_user(self, username:str, user_f_name:str, user_l_name:str, pw:str, access:int=0, access_until = None, account_type:str = 'Internal', user_m_initial:str = ''):
         #validate parameters
         IOValidation.InputOutputValidation.validate_user_name(username) #If it fails, error will be raised
         IOValidation.InputOutputValidation.validate_user_first_last_name(user_f_name, user_l_name)
@@ -67,7 +67,7 @@ class InternalDBConnection(Database_Interface_Parents.InternalDB):
         self._InternalDB__connect()
         crs = self.conn.cursor()
 
-        new_user_id = uuid.uuid4()
+        new_user_id = str(uuid.uuid4())
         query = """INSERT INTO Users (user_id, username, user_pw, user_f_name, user_l_name, user_middle_initial,
                                          access_level, access_until, account_type)
                                VALUES(?,?,?,?,?,?
@@ -86,7 +86,11 @@ class InternalDBConnection(Database_Interface_Parents.InternalDB):
 
     def check_for_enabled_admin(self):
         self._InternalDB__connect()
-        query = """SELECT Count(1) FROM Users WHERE Account_type = 'Global Admin' and coalesce(access_until, CURRENT_TIMESTAMP +1) > CURRENT_TIMESTAMP"""
+        #global admin defined as access lebvel 31 AKA CRUDA
+        query = """SELECT Count(1) FROM Users 
+                    WHERE Account_type = 'Internal' 
+                    AND access_level = 31 
+                    AND coalesce(access_until, CURRENT_TIMESTAMP) >= CURRENT_TIMESTAMP"""#NULL access_until means 'until further notice'. 
         crs = self.conn.cursor()
         crs.execute(query)
         results = crs.fetchall()
@@ -104,7 +108,7 @@ class InternalDBConnection(Database_Interface_Parents.InternalDB):
         IOValidation.InputOutputValidation.validate_user_name(username) #If it fails, error will be raised
         self._InternalDB__connect()
         if  self.conn is not None:
-            query = """SELECT user_pw FROM dbo.Users WHERE username = ? AND Account_type = 'Internal'"""
+            query = """SELECT user_pw FROM Users WHERE username = ? AND Account_type = 'Internal'"""
             crs = self.conn.cursor()
 
             #pull hash from database based on username
@@ -138,7 +142,7 @@ class InternalDBConnection(Database_Interface_Parents.InternalDB):
             print("QUERY RESULTS: ", result)
             if result is not None and len(result):
                 headers = [x[0] for x in crs.description]
-                return self.__convert_results_to_json(result)
+                return self.__convert_results_to_json(result, headers)
             else:
                 return None
         self._InternalDB__close_connection()

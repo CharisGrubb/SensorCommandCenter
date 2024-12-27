@@ -47,7 +47,7 @@ elif tkinter.messagebox.askquestion("Rotate Keys?","""Would you like to rotate e
 
 #Check for existing admin user that is enabled. 
 
-
+print("ADMIN: ", db.check_for_enabled_admin())
 if not db.check_for_enabled_admin(): #Explicit check to avoid truthy values
     #Prompt user for the default Username/password internal account:
     username = None
@@ -64,7 +64,7 @@ if not db.check_for_enabled_admin(): #Explicit check to avoid truthy values
     error_msg=''
     while pw is None:    
         try: #### SEE IF TYPING CAN DO THE MASKING DOTS IN THIS...with button for showing password? 
-            pw = tkinter.simpledialog.askstring(f"Internal Admin Password",error_msg + """What password would you like for {username}:
+            pw = tkinter.simpledialog.askstring("Internal Admin Password",error_msg + f"""What password would you like for {username}:
                                                 \n Password Requirements include at least 1 capital/upper case letter, 1 lower case letter, 1 number, 
                                                 and 1 special character [Options: !, @, #, $, %, &, *, +, =, _, or -]""")
             #call password validation

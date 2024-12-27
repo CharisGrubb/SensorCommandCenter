@@ -16,7 +16,7 @@ class Authorization_Tests(unittest.TestCase):
         self.assertRaises(Exception, IOV.validate_user_name, "' OR 1=1--")
 
     def test_access_conversions(self):
-      
+        print(AuthHandler.convert_access_to_int('CRUDA'))
         # self.assertEqual(1,AuthHandler.convert_access_to_int('C'))
         self.assertEqual('C',AuthHandler.convert_int_to_access(1))
 
