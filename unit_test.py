@@ -1,6 +1,7 @@
 from SensorCommandCenter.Auth.Authentication import AuthHandler
 from SensorCommandCenter.Database.IOValidation import InputOutputValidation as IOV
 from SensorCommandCenter.Database import Database_Interfaces
+from SensorCommandCenter.Logging import Logger
 import unittest 
 import datetime
 
@@ -52,6 +53,10 @@ class DB_Tests(unittest.TestCase):
             with self.subTest(user=user):
                 self.assertIsNotNone(self.db.get_password_hash(user['username']), f"No PW for user {user['username']}")
 
+class Logger_Tests(unittest.TestCase):
+    def test_insert_log(self):
+        log = Logger.Log('Test Logger', 'unit_test')
+        self.assertIsNone(log.log_to_database('Unit Test', 'Testing log insert.', 'INFO', None))#Should not error or return anything
 
 if __name__ == '__main__':
     unittest.main()
