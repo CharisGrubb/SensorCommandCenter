@@ -1,25 +1,21 @@
 
-import sqlite3 #Used for internal db connection
+from Database.DatabaseStructures.Base import Base
 import sqlalchemy #used for external db connection
 import traceback
-import os
+
 
 
 #parent Internal 
 class InternalDB():
     def __init__(self):
-       self.conn = None
+       
+        self.engine = sqlalchemy.create_engine("sqlite.:///internal_sensor_database.db")
+        Base.metadata.create_all(self.engine)
+        self.Session = sqlalchemy.orm.sessionmaker(bind=self.engine)
 
-    def __connect(self):
-        if os.path.exists(os.path.dirname(__file__) + "/internal_sensor_database.db"):
-            self.conn = sqlite3.connect(os.path.dirname(__file__) + "/internal_sensor_database.db")
-        else:
-            print(os.curdir)
-            raise Exception("NO INTERNAL DB", os.getcwd())
-        
-    def __close_connection(self):
-        self.conn.close()
-        self.conn = None
+    def get_session(self):
+        return self.Session()
+
 
 
 #PARENT-SQLAlchemy

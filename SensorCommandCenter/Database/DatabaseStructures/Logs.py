@@ -3,9 +3,7 @@ from sqlalchemy.orm import Mapped, mapped_column
 from SensorCommandCenter.Database.DatabaseStructures import Base
 
 
-class Data_Points(Base):
-    __tablename__ = "data_points"
+class Logs(Base):
+    __tablename__ = "logs"
 
-    id: Mapped[int] = mapped_column(primary_key=True)
-
-    
+    log_id: Mapped[int] = mapped_column(primary_key = True)
