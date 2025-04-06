@@ -35,6 +35,7 @@ class Configs(Base):
     __tablename__ = "logs"
     config_id: Mapped[int] = mapped_column(primary_key = True)
 
+
 class Logs(Base):
     __tablename__ = "logs"
     log_id: Mapped[int] = mapped_column(primary_key = True)

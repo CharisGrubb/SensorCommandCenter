@@ -1,5 +1,5 @@
 
-from Database.DatabaseStructures.Base import Base
+from SensorCommandCenter.Database.DatabaseStructures.Relational_DB import Base
 import sqlalchemy #used for external db connection
 import traceback
 
