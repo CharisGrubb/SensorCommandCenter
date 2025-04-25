@@ -1,9 +1,8 @@
 ```mermaid 
----
-Title: Sensor Command Center Main Service Flow
----
 
 flowchart LR
+
+
     DB_Interface
     DB_Handler
     API
